@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.beardedhen.androidbootstrap.FontAwesomeText
+        android:id="@+id/entryseat_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_margin="25dp"
+        android:textColor="#ea6153"
+        android:textSize="30sp"
+        app:fa_icon="fa-close" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/small"
+        android:paddingTop="@dimen/small">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/waku"
+            android:padding="@dimen/medium">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/large"
+                android:text="エントリーシート"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text"
+                android:textStyle="bold" />
+
+            <TableRow
+                android:layout_margin="@dimen/small"
+                android:layout_marginBottom="@dimen/small"
+                android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="開始日"
+                    android:textColor="#000"
+                    android:textSize="@dimen/medium_text" />
+
+                <DatePicker
+                    android:id="@+id/entry_seat_start"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:calendarViewShown="false" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_margin="@dimen/small"
+                android:layout_marginBottom="@dimen/small"
+                android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="終了日"
+                    android:textColor="#000"
+                    android:textSize="@dimen/medium_text" />
+
+                <DatePicker
+                    android:id="@+id/entry_seat_end"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:calendarViewShown="false" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_margin="@dimen/small"
+                android:layout_marginBottom="@dimen/small"
+                android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="30"
+                    android:gravity="center"
+                    android:text="方法"
+                    android:textColor="#000"
+                    android:textSize="@dimen/medium_text" />
+
+                <RadioGroup
+                    android:id="@+id/entry_seat_system"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/entry_seat_system_web"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Web" />
+
+                    <RadioButton
+                        android:id="@+id/entry_seat_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="郵送" />
+
+                    <RadioButton
+                        android:id="@+id/entry_seat_system_school"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="学校\n経由" />
+
+                    <RadioButton
+                        android:id="@+id/entry_seat_system_site"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="サイト" />
+
+                </RadioGroup>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_margin="@dimen/small"
+                android:layout_marginBottom="@dimen/small"
+                android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="内容"
+                    android:textColor="#000"
+                    android:textSize="@dimen/medium_text" />
+
+                <!--　項目作成　-->
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/entry_seat_contains"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="10"
+                    android:gravity="center_vertical"
+                    app:be_state="danger" />
+
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
+</FrameLayout>

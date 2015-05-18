@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/large"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="説明会"
+        android:textColor="#000"
+        android:textSize="@dimen/large_text" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow android:layout_marginTop="@dimen/medium">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="場所"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text" />
+            <TextView
+                android:id="@+id/detail_guidance_place"
+                android:textSize="@dimen/medium_text"
+                android:textColor="#000"
+                android:layout_width="0dp"
+                android:layout_weight="10"
+                android:layout_height="match_parent"/>
+
+        </TableRow>
+
+        <TableRow android:layout_marginTop="@dimen/medium">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="日程"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text" />
+            <TextView
+                android:id="@+id/detail_guidance_date"
+                android:layout_width="0dp"
+                android:layout_weight="10"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text"
+                android:layout_height="match_parent"/>
+
+        </TableRow>
+
+        <TableRow android:layout_marginTop="@dimen/medium">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="時間"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text" />
+            <TextView
+                android:id="@+id/detail_guidance_time"
+                android:textSize="@dimen/medium_text"
+                android:textColor="#000"
+                android:layout_width="0dp"
+                android:layout_weight="10"
+                android:layout_height="match_parent"/>
+
+        </TableRow>
+
+    </TableLayout>
+
+
+</LinearLayout>

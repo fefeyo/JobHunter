@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/large"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/detail_interview_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1次面接"
+            android:textColor="#000"
+            android:textSize="@dimen/large_text" />
+
+        <TableRow android:layout_marginTop="@dimen/medium">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="日程"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text" />
+            <TextView
+                android:id="@+id/detail_interview_date"
+                android:layout_width="0dp"
+                android:textColor="#000"
+                android:layout_weight="10"
+                android:textSize="@dimen/medium_text"
+                android:layout_height="match_parent"/>
+        </TableRow>
+
+        <TableRow android:layout_marginTop="@dimen/medium">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="時間"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text" />
+            <TextView
+                android:id="@+id/detail_interview_time"
+                android:layout_width="0dp"
+                android:textColor="#000"
+                android:layout_weight="10"
+                android:textSize="@dimen/medium_text"
+                android:layout_height="match_parent"/>
+        </TableRow>
+
+        <TableRow android:layout_marginTop="@dimen/medium">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="服装"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text" />
+            <TextView
+                android:id="@+id/detail_interview_clothes"
+                android:layout_width="0dp"
+                android:textColor="#000"
+                android:layout_weight="10"
+                android:textSize="@dimen/medium_text"
+                android:layout_height="match_parent"/>
+        </TableRow>
+
+        <TableRow android:layout_marginTop="@dimen/medium">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="相手"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text" />
+            <TextView
+                android:id="@+id/detail_interview_person"
+                android:layout_width="0dp"
+                android:textColor="#000"
+                android:layout_weight="10"
+                android:textSize="@dimen/medium_text"
+                android:layout_height="match_parent"/>
+        </TableRow>
+
+        <TableRow android:layout_marginTop="@dimen/medium">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="形式"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text" />
+            <TextView
+                android:id="@+id/detail_interview_format"
+                android:layout_width="0dp"
+                android:textColor="#000"
+                android:layout_weight="10"
+                android:textSize="@dimen/medium_text"
+                android:layout_height="match_parent"/>
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>

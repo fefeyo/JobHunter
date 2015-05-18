@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.beardedhen.androidbootstrap.FontAwesomeText
+        android:id="@+id/interview_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_margin="25dp"
+        android:textColor="#ea6153"
+        android:textSize="30sp"
+        app:fa_icon="fa-close" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/small"
+        android:paddingTop="@dimen/small">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/waku"
+            android:padding="@dimen/medium">
+
+            <TextView
+                android:id="@+id/interview_count"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/large"
+                android:textColor="#000"
+                android:textSize="@dimen/medium_text"
+                android:textStyle="bold" />
+
+            <TableRow
+                android:layout_marginBottom="@dimen/small"
+                android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="日程"
+                    android:textColor="#000"
+                    android:textSize="@dimen/medium_text" />
+
+                <DatePicker
+                android:id="@+id/interview_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:calendarViewShown="false" />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="@dimen/small"
+                android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="時間"
+                    android:textColor="#000"
+                    android:textSize="@dimen/medium_text" />
+
+                <TimePicker
+                    android:id="@+id/interview_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10" />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="@dimen/small"
+                android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="場所"
+                    android:textColor="#000"
+                    android:textSize="@dimen/medium_text" />
+
+                <com.beardedhen.androidbootstrap.BootstrapEditText
+                    android:id="@+id/interview_place"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="10"
+                    android:gravity="center_vertical"
+                    app:be_state="warning" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_marginBottom="@dimen/small"
+                android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="形式"
+                    android:textColor="#000"
+                    android:textSize="@dimen/medium_text" />
+
+                <RadioGroup
+                    android:id="@+id/interview_format"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/interview_format_private"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="個別" />
+
+                    <RadioButton
+                        android:id="@+id/interview_format_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="グループ" />
+                </RadioGroup>
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="@dimen/small"
+                android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="相手"
+                    android:textColor="#000"
+                    android:textSize="@dimen/medium_text" />
+
+                <TableLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="10">
+
+                    <TableRow
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="@dimen/small"
+                        android:layout_marginTop="@dimen/small"
+                        android:layout_weight="1">
+
+                        <CheckBox
+                            android:id="@+id/interview_person_student"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="学生" />
+
+                        <CheckBox
+                            android:id="@+id/interview_person_ceo"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="CEO" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="@dimen/small"
+                        android:layout_marginTop="@dimen/small"
+                        android:layout_weight="1">
+
+                        <CheckBox
+                            android:id="@+id/interview_person_cto"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="CTO" />
+
+                        <CheckBox
+                            android:id="@+id/interview_person_hr"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="人事" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="@dimen/small"
+                android:layout_marginTop="@dimen/small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="服装"
+                    android:textColor="#000"
+                    android:textSize="@dimen/medium_text" />
+
+                <RadioGroup
+                    android:id="@+id/interview_clothes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/interview_clothes_private"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="私服" />
+
+                    <RadioButton
+                        android:id="@+id/interview_clothes_suit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="スーツ" />
+                </RadioGroup>
+            </TableRow>
+
+        </TableLayout>
+
+    </LinearLayout>
+</FrameLayout>

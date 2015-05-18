@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.beardedhen.androidbootstrap.FontAwesomeText
+        android:id="@+id/personal_close"
+        app:fa_icon="fa-close"
+        android:layout_margin="25dp"
+        android:textColor="#ea6153"
+        android:textSize="30sp"
+        android:layout_gravity="top|right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+<LinearLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:paddingBottom="@dimen/medium"
+android:paddingTop="@dimen/medium">
+
+<TableLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/medium"
+    android:background="@drawable/waku">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:padding="@dimen/large"
+        android:text="履歴書"
+        android:textColor="#000"
+        android:textSize="@dimen/medium_text"
+        android:textStyle="bold" />
+
+    <TableRow
+        android:layout_marginTop="@dimen/small"
+        android:layout_marginBottom="@dimen/small">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="開始日"
+            android:textColor="#000"
+            android:textSize="@dimen/medium_text" />
+
+        <DatePicker
+            android:id="@+id/personal_seat_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:calendarViewShown="false" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_marginTop="@dimen/small"
+        android:layout_marginBottom="@dimen/small">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="終了日"
+            android:textColor="#000"
+            android:textSize="@dimen/medium_text" />
+
+        <DatePicker
+            android:id="@+id/personal_seat_end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:calendarViewShown="false" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginTop="@dimen/small"
+        android:layout_marginBottom="@dimen/small">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="30"
+            android:gravity="center"
+            android:text="方法"
+            android:textColor="#000"
+            android:textSize="@dimen/medium_text" />
+
+        <!--　Weight10　-->
+
+        <RadioGroup
+            android:id="@+id/personal_seat_system"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/personal_seat_system_web"
+                android:text="Web"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:id="@+id/personal_seat_system_address"
+                android:text="郵送"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:id="@+id/personal_seat_system_school"
+                android:text="学校\n経由"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:id="@+id/personal_seat_system_site"
+                android:text="サイト"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+        </RadioGroup>
+    </TableRow>
+
+    <TableRow
+        android:layout_marginTop="@dimen/small"
+        android:layout_marginBottom="@dimen/small">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="30"
+            android:gravity="center"
+            android:text="形式"
+            android:textColor="#000"
+            android:textSize="@dimen/medium_text" />
+
+        <!--　Weight10　-->
+
+        <RadioGroup
+            android:id="@+id/personal_seat_format"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/personal_seat_format_data"
+                android:text="データ"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:id="@+id/personal_seat_format_paper"
+                android:text="紙"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:id="@+id/personal_seat_format_school"
+                android:text="学校\n指定"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+        </RadioGroup>
+    </TableRow>
+</TableLayout>
+
+</LinearLayout>
+</FrameLayout>
