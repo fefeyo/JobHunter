@@ -3,8 +3,7 @@
     android:id="@+id/company_list_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:background="#E60012"
+    android:layout_height="wrap_content"
     android:padding="8dp">
 
     <LinearLayout
@@ -16,15 +15,16 @@
             android:id="@+id/list_companyname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:textSize="25sp" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/LL_text" />
 
         <TextView
             android:id="@+id/list_companyposition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:textSize="20sp" />
+            android:textColor="@color/white"
+            android:layout_marginTop="5dp"
+            android:textSize="@dimen/medium_text" />
     </LinearLayout>
 
     <TextView

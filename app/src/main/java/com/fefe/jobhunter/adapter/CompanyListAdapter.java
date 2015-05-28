@@ -35,11 +35,11 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyListItem>{
         TextView c_position = (TextView)convertView.findViewById(R.id.list_companyposition);
         c_position.setText(item.getPosition());
         TextView time = (TextView)convertView.findViewById(R.id.list_companytime);
-        time.setText(item.getDate());
+        time.setText("登録日："+item.getDate());
         FrameLayout layout = (FrameLayout)convertView.findViewById(R.id.company_list_container);
-        /*　ToDo:Color.parseColorでNullが発生　*/
-        layout.setBackgroundColor(Color.parseColor(item.getColor()));
 
+        /*　ToDo:Color.parseColorでNullが発生　*/
+        layout.setBackgroundColor(getContext().getResources().getColor(Integer.parseInt(item.getColor())));
         return convertView;
     }
 }

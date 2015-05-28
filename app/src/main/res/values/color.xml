@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="back_white">#ecf0f1</color>
+	<color name = "one">#E60012</color>
+	<color name = "twe">#EB6100</color>
+	<color name = "three">#F39800</color>
+	<color name = "four">#FCC800</color>
+	<color name = "five">#FFF100</color>
+	<color name = "six">#CFDB00</color>
+	<color name = "seven">#8FC31F</color>
+	<color name = "eight">#22AC38</color>
+	<color name = "nine">#009944</color>
+	<color name = "ten">#009B6B</color>
+	<color name = "eleven">#009E96</color>
+	<color name = "twenteen">#00A0C1</color>
+	<color name = "thirteen">#00A0E9</color>
+	<color name = "fourteen">#0086D1</color>
+	<color name = "fifteen">#0068B7</color>
+	<color name = "seventeen">#00479D</color>
+	<color name = "eighteen">#1D2088</color>
+	<color name = "nineteen">#601986</color>
+	<color name = "twenty">#920783</color>
+	<color name = "twentyone">#BE0081</color>
+	<color name = "twentytwe">#E4007F</color>
+	<color name = "twentythree">#E5006A</color>
+	<color name = "twentyfour">#E5004F</color>
+	<color name = "twentyfive">#E60033</color>
+
+	<!--　アクションバーの上のバーの色　-->
+	<color name="accent">#304FFE</color>
+	<!--　アクションバーの色　-->
+	<color name="primary">#3D5AFE</color>
+	<!--　ダイアログやその他操作した時に出るものにつける色　-->
+	<color name="secondaly">#8C9EFF</color>
+	<!--　上記の色が入っている場所に入れるテキストやその他背景の色　-->
+	<color name="white">#ecf0f1</color>
+	<!--　主にコンテンツ内のテキストカラー　-->
+	<color name="black">#000000</color>
+	<color name="sub_accent">#FFD54F</color>
+
+</resources>

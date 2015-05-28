@@ -109,4 +109,14 @@ public class AddCompanyListFragment extends DialogFragment{
         return dialog.create();
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+    }
+
 }

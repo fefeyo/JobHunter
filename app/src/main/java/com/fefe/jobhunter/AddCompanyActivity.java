@@ -1,10 +1,17 @@
 package com.fefe.jobhunter;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.Time;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +20,7 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -24,12 +32,14 @@ import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.beardedhen.androidbootstrap.FontAwesomeText;
 import com.fefe.jobhunter.adapter.MySpinnerAdapter;
 import com.fefe.jobhunter.fragment.AddCompanyListFragment;
+import com.fefe.jobhunter.item.CalendarInsertItem;
 import com.fefe.jobhunter.item.Data;
 import com.fefe.jobhunter.item.InterviewItem;
 
-import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +51,7 @@ import java.util.List;
 ・実機で見るとViewが真っ黒になり何も見えない　未解決
 ・色選択しているのにNullが入る　解決　理由：ヘッダーをつけていたため
 ・選考を追加して完了すると落ちる(エントリー締め切りが怪しい)　解決　理由：ラジオボタンのNull
+・TODO:最新の面接にしか削除ボタンが付かないようにする
 　*/
 
 public class AddCompanyActivity extends ActionBarActivity {
@@ -49,9 +60,16 @@ public class AddCompanyActivity extends ActionBarActivity {
     public HashMap<Integer, String> map;
     public int interview_count;
 
+    private ArrayList<CalendarInsertItem> insertItemList;
+    private CalendarInsertItem insertItem;
+    private Calendar mNow;
+
+    private HashMap<Integer, FontAwesomeText> deleteList;
+
     private Spinner colorSpinner;
     private String labelColor;
 
+    private boolean situation;
     private ScrollView scroller;
 
     //　使われたかどうか
@@ -66,8 +84,8 @@ public class AddCompanyActivity extends ActionBarActivity {
     public int count;
 
     /*　社名、部署名　*/
-    private BootstrapEditText company_name;
-    private BootstrapEditText company_place;
+    private EditText company_name;
+    private EditText company_place;
 
     /*　説明会　*/
     private BootstrapEditText guidance_place;
@@ -116,17 +134,23 @@ public class AddCompanyActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_company);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setTitle("選考を追加");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mNow = Calendar.getInstance();
+        mNow.setTimeInMillis(System.currentTimeMillis());
+        insertItemList = new ArrayList<>();
+
         layout = (LinearLayout) findViewById(R.id.add_container);
-        company_name = (BootstrapEditText) findViewById(R.id.company_name);
-        company_place = (BootstrapEditText) findViewById(R.id.company_place);
+        company_name = (EditText) findViewById(R.id.company_name);
+        company_place = (EditText) findViewById(R.id.company_place);
         colorSpinner = (Spinner) findViewById(R.id.colorSpinner);
         colorSpinner.setAdapter(new MySpinnerAdapter(getApplicationContext()));
         yearId = Resources.getSystem().getIdentifier("year", "id", "android");
         initMap();
         interview_item = new HashMap<>();
         scroller = (ScrollView) findViewById(R.id.scroller);
+        deleteList = new HashMap<>();
         findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,21 +170,32 @@ public class AddCompanyActivity extends ActionBarActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Spinner s = (Spinner) parent;
-                labelColor = (String) s.getItemAtPosition(position);
+                labelColor = Integer.toString((Integer) s.getItemAtPosition(position));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
 
     protected void onResume() {
         super.onResume();
-        count = 7;
-        interview_count = 1;
-        setBool();
+        if (!situation) {
+            count = 7;
+            interview_count = 1;
+            setBool();
+        }
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        situation = false;
+    }
+
+    protected void onStop() {
+        super.onStop();
+        situation = true;
     }
 
 
@@ -203,8 +238,7 @@ public class AddCompanyActivity extends ActionBarActivity {
         final View v = getLayoutInflater().inflate(R.layout.entry_seat, null);
         v.findViewById(R.id.entry_seat_start).findViewById(yearId).setVisibility(View.GONE);
         v.findViewById(R.id.entry_seat_end).findViewById(yearId).setVisibility(View.GONE);
-        v.setAnimation(getAnimation(0, 1, 500));
-        layout.addView(v);
+
         entryseat_start = (DatePicker) v.findViewById(R.id.entry_seat_start);
         entryseat_end = (DatePicker) v.findViewById(R.id.entry_seat_end);
         entryseat_system = (RadioGroup) v.findViewById(R.id.entry_seat_system);
@@ -216,12 +250,12 @@ public class AddCompanyActivity extends ActionBarActivity {
                 closeView(v, 1, view);
             }
         });
+        v.setAnimation(getAnimation(0, 1, 500));
+        layout.addView(v);
     }
 
     public void setPersonalSeat() {
         final View v = getLayoutInflater().inflate(R.layout.personal_seat, null);
-        v.setAnimation(getAnimation(0, 1, 500));
-        layout.addView(v);
         personalseat_start = (DatePicker) v.findViewById(R.id.personal_seat_start);
         personalseat_start.findViewById(yearId).setVisibility(View.GONE);
         personalseat_end = (DatePicker) v.findViewById(R.id.personal_seat_end);
@@ -235,13 +269,13 @@ public class AddCompanyActivity extends ActionBarActivity {
                 closeView(v, 2, view);
             }
         });
+        v.setAnimation(getAnimation(0, 1, 500));
+        layout.addView(v);
     }
 
     public void setGroupDiscussion() {
         final View v = getLayoutInflater().inflate(R.layout.group_discussion, null);
         v.findViewById(R.id.group_discussion_date).findViewById(yearId).setVisibility(View.GONE);
-        v.setAnimation(getAnimation(0, 1, 500));
-        layout.addView(v);
         groupdiscussion_place = (BootstrapEditText) v.findViewById(R.id.group_discussion_place);
         groupdiscussion_clothes = (RadioGroup) v.findViewById(R.id.group_discussion_clothes);
         groupdiscussion_date = (DatePicker) v.findViewById(R.id.group_discussion_date);
@@ -253,6 +287,8 @@ public class AddCompanyActivity extends ActionBarActivity {
                 closeView(v, 3, view);
             }
         });
+        v.setAnimation(getAnimation(0, 1, 500));
+        layout.addView(v);
     }
 
     public void setInterview(String count) {
@@ -260,13 +296,10 @@ public class AddCompanyActivity extends ActionBarActivity {
         v.findViewById(R.id.interview_date).findViewById(yearId).setVisibility(View.GONE);
         TextView interview_name = (TextView) v.findViewById(R.id.interview_count);
         interview_name.setText(count + "面接");
-        v.setAnimation(getAnimation(0, 1, 500));
-        layout.addView(v);
-
         interview_place = (BootstrapEditText) v.findViewById(R.id.interview_place);
         RadioGroup interview_clothes = (RadioGroup) v.findViewById(R.id.interview_clothes);
         DatePicker interview_date = (DatePicker) v.findViewById(R.id.interview_date);
-        TimePicker interview_time = (TimePicker)v.findViewById(R.id.interview_time);
+        TimePicker interview_time = (TimePicker) v.findViewById(R.id.interview_time);
         RadioGroup interview_format = (RadioGroup) v.findViewById(R.id.interview_format);
         CheckBox interview_student = (CheckBox) v.findViewById(R.id.interview_person_student);
         CheckBox interview_cto = (CheckBox) v.findViewById(R.id.interview_person_cto);
@@ -284,12 +317,21 @@ public class AddCompanyActivity extends ActionBarActivity {
         item.setInterview_hr(interview_hr);
         interview_item.put(interview_count, item);
         isInterview = true;
+        deleteList.put(interview_count, (FontAwesomeText) v.findViewById(R.id.interview_close));
+        for (int i = 1; i < deleteList.size() + 1; i++) {
+            deleteList.get(i).setVisibility(View.GONE);
+            if (i == interview_count) {
+                deleteList.get(interview_count).setVisibility(View.VISIBLE);
+            }
+        }
         v.findViewById(R.id.interview_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 closeView(v, 4, view);
             }
         });
+        v.setAnimation(getAnimation(0, 1, 500));
+        layout.addView(v);
     }
 
     public void setFinalInterview() {
@@ -297,12 +339,10 @@ public class AddCompanyActivity extends ActionBarActivity {
         v.findViewById(R.id.interview_date).findViewById(yearId).setVisibility(View.GONE);
         TextView interview_count = (TextView) v.findViewById(R.id.interview_count);
         interview_count.setText("最終面接");
-        v.setAnimation(getAnimation(0, 1, 500));
-        layout.addView(v);
         finalInterview_place = (BootstrapEditText) v.findViewById(R.id.interview_place);
         finalInterview_clothes = (RadioGroup) v.findViewById(R.id.interview_clothes);
         finalInterview_date = (DatePicker) v.findViewById(R.id.interview_date);
-        finalInterview_time = (TimePicker)v.findViewById(R.id.interview_time);
+        finalInterview_time = (TimePicker) v.findViewById(R.id.interview_time);
         finalInterview_format = (RadioGroup) v.findViewById(R.id.interview_format);
         finalInterview_student = (CheckBox) v.findViewById(R.id.interview_person_student);
         finalInterview_cto = (CheckBox) v.findViewById(R.id.interview_person_cto);
@@ -315,13 +355,13 @@ public class AddCompanyActivity extends ActionBarActivity {
                 closeView(v, 5, view);
             }
         });
+        v.setAnimation(getAnimation(0, 1, 500));
+        layout.addView(v);
     }
 
     public void setEntryPeriod() {
         final View v = getLayoutInflater().inflate(R.layout.entry_period, null);
         v.findViewById(R.id.entry_period_date).findViewById(yearId).setVisibility(View.GONE);
-        v.setAnimation(getAnimation(0, 1, 500));
-        layout.addView(v);
         entryperiod_system = (RadioGroup) v.findViewById(R.id.entry_period_system);
         entryperiod_format = (RadioGroup) v.findViewById(R.id.entry_period_format);
         entryperiod_date = (DatePicker) v.findViewById(R.id.entry_period_date);
@@ -332,6 +372,8 @@ public class AddCompanyActivity extends ActionBarActivity {
                 closeView(v, 6, view);
             }
         });
+        v.setAnimation(getAnimation(0, 1, 500));
+        layout.addView(v);
     }
 
     private void initMap() {
@@ -380,6 +422,17 @@ public class AddCompanyActivity extends ActionBarActivity {
             data.guidance_day = getDay(guidance_date);
             data.guidance_time = getTime(guidance_time);
             data.used_guidance = true;
+
+            insertItem = new CalendarInsertItem();
+            final Calendar start = Calendar.getInstance();
+            start.set(mNow.get(Calendar.YEAR), guidance_date.getMonth(), guidance_date.getDayOfMonth());
+            insertItem.setCompanyName(company_name.getText().toString());
+            insertItem.setDescription(company_name.getText().toString() + "の説明会");
+            insertItem.setEventName("説明会");
+            insertItem.setStart(start);
+            insertItem.setPlace(guidance_place.getText().toString());
+            insertItemList.add(insertItem);
+
         }
         if (isEntrySeat) {
             data.entryseat_start_month = getMonth(entryseat_start);
@@ -394,6 +447,18 @@ public class AddCompanyActivity extends ActionBarActivity {
             }
             data.entryseat_contains = entryseat_contains.getText().toString();
             data.used_entryseat = true;
+
+            final Calendar start = Calendar.getInstance();
+            start.set(mNow.get(Calendar.YEAR), entryseat_start.getMonth(), entryseat_start.getDayOfMonth());
+            final Calendar end = Calendar.getInstance();
+            end.set(mNow.get(Calendar.YEAR), entryseat_end.getMonth(), entryseat_end.getDayOfMonth());
+            insertItem = new CalendarInsertItem();
+            insertItem.setCompanyName(company_name.getText().toString());
+            insertItem.setEventName("エントリーシート");
+            insertItem.setDescription(entryseat_contains.getText().toString());
+            insertItem.setStart(start);
+            insertItem.setEnd(end);
+            insertItemList.add(insertItem);
         }
         if (isPersonalSeat) {
             data.personal_start_month = getMonth(personalseat_start);
@@ -408,6 +473,18 @@ public class AddCompanyActivity extends ActionBarActivity {
                 flag = true;
             }
             data.used_personalseat = true;
+
+            final Calendar start = Calendar.getInstance();
+            start.set(mNow.get(Calendar.YEAR), personalseat_start.getMonth(), personalseat_start.getDayOfMonth());
+            final Calendar end = Calendar.getInstance();
+            end.set(mNow.get(Calendar.YEAR), personalseat_end.getMonth(), personalseat_end.getDayOfMonth());
+            insertItem = new CalendarInsertItem();
+            insertItem.setCompanyName(company_name.getText().toString());
+            insertItem.setDescription(company_name.getText().toString()+"の履歴書");
+            insertItem.setEventName("履歴書");
+            insertItem.setStart(start);
+            insertItem.setEnd(end);
+            insertItemList.add(insertItem);
         }
         if (isGroupDiscussion) {
             data.groupdiscussion_place = groupdiscussion_place.getText().toString();
@@ -421,6 +498,16 @@ public class AddCompanyActivity extends ActionBarActivity {
             data.groupdiscussion_day = getDay(groupdiscussion_date);
             data.groupdiscussion_time = getTime(groupdiscussion_time);
             data.used_groupdiscussion = true;
+
+            final Calendar start = Calendar.getInstance();
+            start.set(mNow.get(Calendar.YEAR), groupdiscussion_date.getMonth(), guidance_date.getDayOfMonth());
+            insertItem = new CalendarInsertItem();
+            insertItem.setCompanyName(company_name.getText().toString());
+            insertItem.setEventName("グループディスカッション");
+            insertItem.setDescription(company_name.getText().toString()+"のグループディスカッション");
+            insertItem.setStart(start);
+            insertItem.setPlace(groupdiscussion_place.getText().toString());
+            insertItemList.add(insertItem);
         }
         if (isInterview) {
             for (int i = 1; interview_item.size() + 1 > i; i++) {
@@ -442,6 +529,17 @@ public class AddCompanyActivity extends ActionBarActivity {
                     data.interview_person_ceo_one = item.getInterview_ceo().isChecked();
                     data.interview_person_hr_one = item.getInterview_hr().isChecked();
                     data.used_interview_one = true;
+
+                    final Calendar start = Calendar.getInstance();
+                    start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
+                    insertItem = new CalendarInsertItem();
+                    insertItem.setCompanyName(company_name.getText().toString());
+                    insertItem.setEventName("1次面接");
+                    insertItem.setStart(start);
+                    insertItem.setDescription(company_name+"の1次面接");
+                    insertItem.setPlace(item.getInterview_place().getText().toString());
+                    insertItemList.add(insertItem);
+
                 } else if (i == 2) {
                     data.interview_place_twe = item.getInterview_place().getText().toString();
                     data.interview_month_twe = getMonth(item.getInterview_date());
@@ -459,6 +557,17 @@ public class AddCompanyActivity extends ActionBarActivity {
                     data.interview_person_ceo_twe = item.getInterview_ceo().isChecked();
                     data.interview_person_hr_twe = item.getInterview_hr().isChecked();
                     data.used_interview_twe = true;
+
+                    final Calendar start = Calendar.getInstance();
+                    start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
+                    insertItem = new CalendarInsertItem();
+                    insertItem.setCompanyName(company_name.getText().toString());
+                    insertItem.setEventName("2次面接");
+                    insertItem.setStart(start);
+                    insertItem.setDescription(company_name + "の2次面接");
+                    insertItem.setPlace(item.getInterview_place().getText().toString());
+                    insertItemList.add(insertItem);
+
                 } else if (i == 3) {
                     data.interview_place_three = item.getInterview_place().getText().toString();
                     data.interview_month_three = getMonth(item.getInterview_date());
@@ -476,6 +585,17 @@ public class AddCompanyActivity extends ActionBarActivity {
                     data.interview_person_ceo_three = item.getInterview_ceo().isChecked();
                     data.interview_person_hr_three = item.getInterview_hr().isChecked();
                     data.used_interview_three = true;
+
+                    final Calendar start = Calendar.getInstance();
+                    start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
+                    insertItem = new CalendarInsertItem();
+                    insertItem.setCompanyName(company_name.getText().toString());
+                    insertItem.setEventName("3次面接");
+                    insertItem.setStart(start);
+                    insertItem.setDescription(company_name.getText().toString()+"の3次面接");
+                    insertItem.setPlace(item.getInterview_place().getText().toString());
+                    insertItemList.add(insertItem);
+
                 } else if (i == 4) {
                     data.interview_place_four = item.getInterview_place().getText().toString();
                     data.interview_month_four = getMonth(item.getInterview_date());
@@ -493,6 +613,17 @@ public class AddCompanyActivity extends ActionBarActivity {
                     data.interview_person_ceo_four = item.getInterview_ceo().isChecked();
                     data.interview_person_hr_four = item.getInterview_hr().isChecked();
                     data.used_interview_four = true;
+
+                    final Calendar start = Calendar.getInstance();
+                    start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
+                    insertItem = new CalendarInsertItem();
+                    insertItem.setCompanyName(company_name.getText().toString());
+                    insertItem.setEventName("4次面接");
+                    insertItem.setStart(start);
+                    insertItem.setDescription(company_name + "の4次面接");
+                    insertItem.setPlace(item.getInterview_place().getText().toString());
+                    insertItemList.add(insertItem);
+
                 } else if (i == 5) {
                     data.interview_place_five = item.getInterview_place().getText().toString();
                     data.interview_month_five = getMonth(item.getInterview_date());
@@ -510,6 +641,16 @@ public class AddCompanyActivity extends ActionBarActivity {
                     data.interview_person_ceo_five = item.getInterview_ceo().isChecked();
                     data.interview_person_hr_five = item.getInterview_hr().isChecked();
                     data.used_interview_five = true;
+
+                    final Calendar start = Calendar.getInstance();
+                    start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
+                    insertItem = new CalendarInsertItem();
+                    insertItem.setCompanyName(company_name.getText().toString());
+                    insertItem.setEventName("5次面接");
+                    insertItem.setDescription(company_name + "の5次面接");
+                    insertItem.setStart(start);
+                    insertItem.setPlace(item.getInterview_place().getText().toString());
+                    insertItemList.add(insertItem);
                 }
             }
         }
@@ -530,6 +671,16 @@ public class AddCompanyActivity extends ActionBarActivity {
             data.interview_person_ceo_final = finalInterview_ceo.isChecked();
             data.interview_person_hr_final = finalInterview_hr.isChecked();
             data.used_interview_final = true;
+
+            final Calendar start = Calendar.getInstance();
+            start.set(mNow.get(Calendar.YEAR), finalInterview_date.getMonth(), finalInterview_date.getDayOfMonth());
+            insertItem = new CalendarInsertItem();
+            insertItem.setCompanyName(company_name.getText().toString());
+            insertItem.setEventName("最終面接");
+            insertItem.setDescription(company_name + "の最終面接");
+            insertItem.setStart(start);
+            insertItem.setPlace(finalInterview_place.getText().toString());
+            insertItemList.add(insertItem);
         }
         if (isEntryPeriod) {
             if (!checkRadio(entryperiod_system) && !checkRadio(entryperiod_format)) {
@@ -542,10 +693,19 @@ public class AddCompanyActivity extends ActionBarActivity {
             data.entryperiod_month = getMonth(entryperiod_date);
             data.entryperiod_day = getDay(entryperiod_date);
             data.used_entryperiod = true;
+
+            final Calendar end = Calendar.getInstance();
+            end.set(mNow.get(Calendar.YEAR), entryperiod_date.getMonth(), entryperiod_date.getDayOfMonth());
+            insertItem = new CalendarInsertItem();
+            insertItem.setCompanyName(company_name.getText().toString());
+            insertItem.setEventName("エントリー締め切り");
+            insertItem.setDescription(company_name + "のエントリー締め切り");
+            insertItem.setStart(end);
         }
         data.color = labelColor;
-        if(!flag) {
+        if (!flag) {
             data.save();
+            insertCalendar();
             finish();
         }
     }
@@ -626,6 +786,7 @@ public class AddCompanyActivity extends ActionBarActivity {
         isInterview = false;
         isEntryPeriod = false;
         isFinalInterview = false;
+        situation = false;
     }
 
     private String getRadio(RadioGroup radio) {
@@ -736,6 +897,11 @@ public class AddCompanyActivity extends ActionBarActivity {
         return false;
     }
 
+    /**
+     * ラジオボタンの未チェックがあれば通知
+     *
+     * @param name
+     */
     private void radioAlert(String name) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("確認");
@@ -749,13 +915,46 @@ public class AddCompanyActivity extends ActionBarActivity {
         builder.create().show();
     }
 
-    private String getTime(TimePicker picker){
+    /**
+     * @param picker
+     * @return TimePickerから時間を取り出す
+     */
+    private String getTime(TimePicker picker) {
         int hour = picker.getCurrentHour();
-        int minute = picker.getCurrentMinute();
-        if(hour == 0 && minute == 0){
-            return "";
+        String minute = Integer.toString(picker.getCurrentMinute());
+        if (minute.length() == 1) {
+            final StringBuilder sb = new StringBuilder(minute);
+            sb.insert(0, "0");
+            minute = sb.toString();
         }
-        return hour+"："+minute;
+        return hour + "：" + minute;
     }
 
+    /**
+     * カレンダーに登録するIntentを飛ばすメソッド
+     */
+    private void insertCalendar() {
+        boolean isAllDay;
+        for (CalendarInsertItem item : insertItemList) {
+            if(item.getEnd() == null){
+                isAllDay = true;
+            }else{
+                isAllDay = false;
+            }
+            //　イベントの登録
+            final ContentResolver cr = getContentResolver();
+            final ContentValues values = new ContentValues();
+            values.put(CalendarContract.Events.DTSTART, item.getStart().getTimeInMillis());
+            values.put(CalendarContract.Events.DTEND, item.getEnd().getTimeInMillis());
+            values.put(CalendarContract.Events.EVENT_TIMEZONE, Time.getCurrentTimezone());
+            values.put(CalendarContract.Events.TITLE, item.getEventName());
+            values.put(CalendarContract.Events.DESCRIPTION, item.getDescription());
+            values.put(CalendarContract.Events.ALL_DAY, isAllDay);
+            values.put(CalendarContract.Events.EVENT_LOCATION, item.getPlace());
+            values.put(CalendarContract.Events.CALENDAR_DISPLAY_NAME, item.getCompanyName());
+            values.put(CalendarContract.Events.CALENDAR_ID, 1);
+
+            cr.insert(CalendarContract.Events.CONTENT_URI, values);
+        }
+    }
 }

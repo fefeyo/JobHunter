@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-
-	<!--　アイコンはここに入れる！参考は入力の方のxml　-->
-	<com.beardedhen.androidbootstrap.FontAwesomeText
-		android:layout_margin="25dp"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"/>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
 
 	<TableLayout
 		android:layout_margin="@dimen/medium"
@@ -16,26 +12,43 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
+		<TableRow>
+
 		<TextView
-			android:layout_width="match_parent"
+			android:id="@+id/weekevent_company"
+			android:layout_width="0dp"
+			android:layout_weight="1"
 			android:layout_height="wrap_content"
-			android:text="履歴書期限"
 			android:padding="@dimen/medium"
+			android:text="会社名"
 			android:textColor="#000"
 			android:textSize="@dimen/large_text"/>
 
+			<TextView
+				android:id="@+id/weekevent_remainder"
+				android:text="あと○日"
+				android:gravity="center_vertical|right"
+				android:layout_marginRight="5dp"
+				android:textSize="@dimen/small_text"
+				android:textColor="@color/one"
+				android:layout_width="0dp"
+				android:layout_weight="1"
+				android:layout_height="match_parent"/>
+
+		</TableRow>
+
 		<TableRow android:layout_margin="@dimen/medium">
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
-				android:text="受付開始日"
+				android:text="選考内容"
 				android:textColor="#000"
 				android:textSize="@dimen/medium_text"/>
 
 			<TextView
-				android:id="@+id/detail_personalseat_start"
+				android:id="@+id/weekevent_contains"
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="10"
@@ -49,12 +62,12 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
-				android:text="受付終了日"
+				android:text="日程"
 				android:textColor="#000"
 				android:textSize="@dimen/medium_text"/>
 
 			<TextView
-				android:id="@+id/detail_personalseat_end"
+				android:id="@+id/weekevent_date"
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="10"
@@ -62,18 +75,20 @@
 				android:textSize="@dimen/medium_text"/>
 		</TableRow>
 
-		<TableRow android:layout_margin="@dimen/medium">
+		<TableRow
+			android:id="@+id/time_row"
+			android:layout_margin="@dimen/medium">
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
-				android:text="方法"
+				android:text="時間"
 				android:textColor="#000"
 				android:textSize="@dimen/medium_text"/>
 
 			<TextView
-				android:id="@+id/detail_personalseat_system"
+				android:id="@+id/weekevent_time"
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="10"
@@ -81,24 +96,27 @@
 				android:textSize="@dimen/medium_text"/>
 		</TableRow>
 
-		<TableRow android:layout_margin="@dimen/medium">
+		<TableRow
+			android:id="@+id/place_row"
+			android:layout_margin="@dimen/medium">
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
-				android:text="形式"
+				android:text="場所"
 				android:textColor="#000"
 				android:textSize="@dimen/medium_text"/>
 
 			<TextView
-				android:id="@+id/detail_personalseat_format"
+				android:id="@+id/weekevent_place"
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="10"
 				android:textColor="#000"
 				android:textSize="@dimen/medium_text"/>
 		</TableRow>
+
 	</TableLayout>
 
 </FrameLayout>

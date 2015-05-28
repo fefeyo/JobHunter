@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.activeandroid.query.Select;
@@ -26,22 +27,22 @@ import java.util.List;
 * 
 * */
 
-public class TodoListFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class CompanyListFragment extends Fragment implements AdapterView.OnItemClickListener{
     private ListView list;
     private ArrayList<CompanyListItem> arr;
     private CompanyListItem item;
 
 
-    public TodoListFragment() {
+    public CompanyListFragment() {
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_todo_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_company_list, container, false);
         list = (ListView)v.findViewById(R.id.todo_list);
-        View empty = getActivity().getLayoutInflater().inflate(R.layout.list_empty, null);
+        final LinearLayout empty = (LinearLayout)v.findViewById(R.id.empty_view);
         list.setEmptyView(empty);
         list.setOnItemClickListener(this);
         setArray();
@@ -87,4 +88,15 @@ public class TodoListFragment extends Fragment implements AdapterView.OnItemClic
         ft.addToBackStack(null);
         ft.commit();
     }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+    }
+
 }

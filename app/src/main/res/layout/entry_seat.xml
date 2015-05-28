@@ -48,7 +48,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3"
                     android:gravity="center"
-                    android:text="開始日"
+                    android:text="受付\n開始日"
                     android:textColor="#000"
                     android:textSize="@dimen/medium_text" />
 
@@ -71,7 +71,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="3"
                     android:gravity="center"
-                    android:text="終了日"
+                    android:text="受付\n終了日"
                     android:textColor="#000"
                     android:textSize="@dimen/medium_text" />
 
