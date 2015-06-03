@@ -2,6 +2,7 @@ package com.fefe.jobhunter.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class CompanyListAdapter extends ArrayAdapter<CompanyListItem>{
         FrameLayout layout = (FrameLayout)convertView.findViewById(R.id.company_list_container);
 
         /*　ToDo:Color.parseColorでNullが発生　*/
+        Log.i("item.getColor", ""+item.getColor());
         layout.setBackgroundColor(getContext().getResources().getColor(Integer.parseInt(item.getColor())));
         return convertView;
     }

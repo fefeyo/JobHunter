@@ -70,6 +70,7 @@ public class AddCompanyListFragment extends DialogFragment{
                         case "最終面接":
                             activity.setFinalInterview();
                             activity.map.remove(5);
+                            activity.isFinalInterview = true;
                             activity.count--;
                             break;
                     }

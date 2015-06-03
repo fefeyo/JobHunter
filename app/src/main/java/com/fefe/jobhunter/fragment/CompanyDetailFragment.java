@@ -1,7 +1,6 @@
 package com.fefe.jobhunter.fragment;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,12 +12,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.activeandroid.query.Select;
+import com.fefe.jobhunter.MainActivity;
 import com.fefe.jobhunter.R;
 import com.fefe.jobhunter.item.Data;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +35,8 @@ public class CompanyDetailFragment extends Fragment {
     private String[] keylist;
     private ScrollView back;
 
+    private String name;
+
     private boolean isEntryperiod, isEntryseat, isGroupdiscussion, isGuidance, isPersonalseat;
     private boolean isInterview_one, isInterview_twe, isInterview_three, isInterview_four, isInterview_five, isFinalinterview;
 
@@ -47,12 +47,12 @@ public class CompanyDetailFragment extends Fragment {
         layout = (LinearLayout) v.findViewById(R.id.detail_container);
         calendarList = new HashMap<>();
         back = (ScrollView)v.findViewById(R.id.detail_back);
-        v.findViewById(R.id.detail_scrolll).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                back.fullScroll(ScrollView.FOCUS_UP);
-            }
-        });
+//        v.findViewById(R.id.detail_scroll).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                back.fullScroll(ScrollView.FOCUS_UP);
+//            }
+//        });
     }
 
     private void resetFlags() {
@@ -97,7 +97,8 @@ public class CompanyDetailFragment extends Fragment {
         resetFlags();
         final List<Data> dataList = new Select().from(Data.class).where("name = ? and time = ?", getArguments().getString("name"), getArguments().getString("time")).execute();
         data = dataList.get(0);
-        detailTitle.setText(data.name);
+        name = data.name;
+        detailTitle.setText(name);
         back.setBackgroundColor(getResources().getColor(Integer.parseInt(data.color)));
         setPage();
         return v;
@@ -105,6 +106,8 @@ public class CompanyDetailFragment extends Fragment {
 
     public void onResume() {
         super.onResume();
+        setHasOptionsMenu(true);
+        MainActivity.setTitle(name);
         resetFlags();
     }
 
@@ -386,10 +389,10 @@ public class CompanyDetailFragment extends Fragment {
                             setInterview();
                         break;
                     case "5次面接":
-                        setFinalinterview();
+                        setInterview();
                         break;
                     case "最終面接":
-                        setInterview();
+                        setFinalinterview();
                         break;
                 }
             }

@@ -2,6 +2,7 @@
     android:id="@+id/detail_back"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:paddingTop="50dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -34,14 +35,14 @@
 
     </LinearLayout>
 
-    <com.beardedhen.androidbootstrap.FontAwesomeText
-        android:id="@+id/detail_scrolll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="4dp"
-        android:textSize="50sp"
-        app:fa_icon="fa-arrow-circle-up"/>
+    <!--<com.beardedhen.androidbootstrap.FontAwesomeText-->
+        <!--android:id="@+id/detail_scroll"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|right"-->
+        <!--android:layout_margin="@dimen/large"-->
+        <!--android:textSize="50sp"-->
+        <!--app:fa_icon="fa-arrow-circle-up"/>-->
 
     </FrameLayout>
 

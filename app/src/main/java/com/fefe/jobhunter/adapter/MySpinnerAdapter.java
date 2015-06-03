@@ -70,7 +70,7 @@ public class MySpinnerAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.spinner_item_row, null);
         }
-        CheckedTextView text = (CheckedTextView) convertView.findViewById(R.id.color_row);
+        final CheckedTextView text = (CheckedTextView) convertView.findViewById(R.id.color_row);
         text.setBackgroundColor(context.getResources().getColor(color[position]));
         return convertView;
     }

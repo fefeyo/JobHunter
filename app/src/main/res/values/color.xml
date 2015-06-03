@@ -29,7 +29,8 @@
 	<!--　アクションバーの上のバーの色　-->
 	<color name="accent">#304FFE</color>
 	<!--　アクションバーの色　-->
-	<color name="primary">#3D5AFE</color>
+	<!--<color name="primary">#3D5AFE</color>-->
+	<color name="primary">#2980b9</color>
 	<!--　ダイアログやその他操作した時に出るものにつける色　-->
 	<color name="secondaly">#8C9EFF</color>
 	<!--　上記の色が入っている場所に入れるテキストやその他背景の色　-->

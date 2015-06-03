@@ -4,16 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.beardedhen.androidbootstrap.FontAwesomeText
-        android:id="@+id/interview_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
-        android:layout_margin="25dp"
-        android:textColor="#ea6153"
-        android:textSize="30sp"
-        app:fa_icon="fa-close" />
-
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -74,6 +64,7 @@
 
                 <TimePicker
                     android:id="@+id/interview_time"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="10" />
@@ -242,4 +233,16 @@
         </TableLayout>
 
     </LinearLayout>
+
+
+    <com.beardedhen.androidbootstrap.FontAwesomeText
+        android:id="@+id/interview_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_margin="25dp"
+        android:textColor="#ea6153"
+        android:textSize="30sp"
+        app:fa_icon="fa-close" />
+
 </FrameLayout>

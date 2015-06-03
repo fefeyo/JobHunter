@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.activeandroid.query.Select;
+import com.fefe.jobhunter.MainActivity;
 import com.fefe.jobhunter.R;
 import com.fefe.jobhunter.adapter.WeekeventAdapter;
 import com.fefe.jobhunter.item.Data;
@@ -331,10 +332,13 @@ public class WeekEventFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(true);
-        getActivity().setTitle("今週の選考");
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        MainActivity.setTitle("今週の選考");
+    }
 
 
 }

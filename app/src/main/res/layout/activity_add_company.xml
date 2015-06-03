@@ -6,6 +6,7 @@
 
 	<ScrollView
 		android:id="@+id/scroller"
+		android:paddingBottom="50dp"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
@@ -17,8 +18,8 @@
 			<FrameLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:padding="@dimen/medium"
-				android:background="@color/primary">
+				android:background="@color/primary"
+				android:padding="@dimen/medium">
 
 				<LinearLayout
 					android:layout_width="match_parent"
@@ -26,69 +27,69 @@
 					android:orientation="vertical">
 
 					<!--<TextView-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:layout_height="wrap_content"-->
-						<!--android:layout_margin="4dp"-->
-						<!--android:text="会社名"-->
-						<!--android:textColor="#000"-->
-						<!--android:textSize="20sp"/>-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:layout_margin="4dp"-->
+					<!--android:text="会社名"-->
+					<!--android:textColor="#000"-->
+					<!--android:textSize="20sp"/>-->
 
 					<EditText
 						android:id="@+id/company_name"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_margin="@dimen/large"
+						android:background="@drawable/text_box"
+						android:hint="会社名"
 						android:singleLine="true"
 						android:textColor="@color/white"
-						android:textSize="@dimen/LL_text"
-						android:background="@drawable/text_box"
-						android:layout_margin="@dimen/large"
 						android:textColorHint="@color/white"
-						android:layout_width="match_parent"
-						android:hint="会社名"
-						android:layout_height="wrap_content"/>
+						android:textSize="@dimen/LL_text"/>
 
 					<!--<com.beardedhen.androidbootstrap.BootstrapEditText-->
-						<!--android:id="@+id/company_name"-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:layout_height="wrap_content"-->
-						<!--android:layout_margin="@dimen/large"-->
-						<!--android:hint="会社名を入力してください"-->
-						<!--android:textSize="@dimen/LL_text"-->
-						<!--android:singleLine="true"-->
-						<!--app:be_state="warning"/>-->
+					<!--android:id="@+id/company_name"-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:layout_margin="@dimen/large"-->
+					<!--android:hint="会社名を入力してください"-->
+					<!--android:textSize="@dimen/LL_text"-->
+					<!--android:singleLine="true"-->
+					<!--app:be_state="warning"/>-->
 
 					<!--<TextView-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:layout_height="wrap_content"-->
-						<!--android:layout_margin="4dp"-->
-						<!--android:text="部署名"-->
-						<!--android:textColor="#000"-->
-						<!--android:textSize="20sp"/>-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:layout_margin="4dp"-->
+					<!--android:text="部署名"-->
+					<!--android:textColor="#000"-->
+					<!--android:textSize="20sp"/>-->
 
 					<!--<com.beardedhen.androidbootstrap.BootstrapEditText-->
-						<!--android:id="@+id/company_place"-->
-						<!--android:layout_width="match_parent"-->
-						<!--android:layout_height="wrap_content"-->
-						<!--android:layout_margin="@dimen/large"-->
-						<!--android:hint="部署名を入力してください"-->
-						<!--android:textSize="@dimen/large_text"-->
-						<!--android:singleLine="true"-->
-						<!--app:be_state="warning"/>-->
+					<!--android:id="@+id/company_place"-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:layout_margin="@dimen/large"-->
+					<!--android:hint="部署名を入力してください"-->
+					<!--android:textSize="@dimen/large_text"-->
+					<!--android:singleLine="true"-->
+					<!--app:be_state="warning"/>-->
 
 					<EditText
 						android:id="@+id/company_place"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_margin="@dimen/large"
+						android:background="@drawable/text_box"
+						android:hint="部署名"
 						android:singleLine="true"
 						android:textColor="@color/white"
-						android:textSize="@dimen/large_text"
-						android:background="@drawable/text_box"
-						android:layout_margin="@dimen/large"
 						android:textColorHint="@color/white"
-						android:layout_width="match_parent"
-						android:hint="部署名"
-						android:layout_height="wrap_content"/>
+						android:textSize="@dimen/large_text"/>
 
 					<TextView
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:layout_margin="@dimen/medium"
+						android:layout_margin="@dimen/large"
 						android:text="ラベルカラー"
 						android:textColor="@color/white"
 						android:textSize="20sp"/>
@@ -99,10 +100,7 @@
 						style="?attr/spinnerStyle"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:layout_marginBottom="12dp"
-						android:layout_marginLeft="4dp"
-						android:layout_marginRight="4dp"
-						android:layout_marginTop="12dp"
+						android:layout_margin="@dimen/large"
 						android:padding="4dp"/>
 				</LinearLayout>
 			</FrameLayout>
@@ -111,8 +109,8 @@
 				android:id="@+id/add_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:padding="@dimen/medium"
-				android:orientation="vertical">
+				android:orientation="vertical"
+				android:padding="@dimen/medium">
 
 			</LinearLayout>
 
@@ -121,8 +119,8 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_horizontal"
-				android:text="選考を追加する"
 				android:layout_margin="@dimen/medium"
+				android:text="選考を追加する"
 				app:bb_icon_left="fa-plus-square"
 				app:bb_size="large"
 				app:bb_type="primary"/>
@@ -130,12 +128,26 @@
 		</LinearLayout>
 	</ScrollView>
 
-	<com.beardedhen.androidbootstrap.FontAwesomeText
-		android:id="@+id/scrollup"
-		android:layout_width="wrap_content"
+	<LinearLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_gravity="bottom|right"
-		android:layout_margin="4dp"
-		android:textSize="50sp"
-		app:fa_icon="fa-arrow-circle-up"/>
+		android:layout_gravity="bottom"
+		android:orientation="vertical">
+
+		<com.beardedhen.androidbootstrap.FontAwesomeText
+			android:id="@+id/scrollup"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="right"
+			android:layout_margin="4dp"
+			android:textSize="50sp"
+			app:fa_icon="fa-arrow-circle-up"/>
+
+		<net.nend.android.NendAdView
+			NendApiKey="c5cb8bc474345961c6e7a9778c947957ed8e1e4f"
+			NendSpotId="3174"
+			android:layout_gravity="center"
+			android:layout_width="wrap_content"
+			android:layout_height="50dp"/>
+	</LinearLayout>
 </FrameLayout>

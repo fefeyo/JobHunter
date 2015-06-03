@@ -1,13 +1,41 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.fefe.jobhunter.fragment.SettingsFragment">
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/white"
+	android:padding="@dimen/large">
 
-	<!-- TODO: Update blank fragment layout -->
-	<TextView
+	<TableLayout
+		android:layout_gravity="center"
+		android:paddingTop="50dp"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:text="@string/hello_blank_fragment"/>
+		android:layout_height="wrap_content">
 
-</FrameLayout>
+		<TableRow>
+
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="6"
+				android:text="内部カレンダーと同期"
+				android:textColor="@color/black"
+				android:textSize="@dimen/medium_text"/>
+
+			<Switch
+				android:id="@+id/save_calendar"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="4"/>
+		</TableRow>
+
+		<TextView
+			android:text="※端末のカレンダーを設定してください"
+			android:textColor="@color/black"
+			android:padding="@dimen/medium"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/small_text"/>
+
+	</TableLayout>
+
+</LinearLayout>

@@ -4,16 +4,6 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content">
 
-	<com.beardedhen.androidbootstrap.FontAwesomeText
-		android:id="@+id/entryperiod_close"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="top|right"
-		android:layout_margin="25dp"
-		android:textColor="#ea6153"
-		android:textSize="30sp"
-		app:fa_icon="fa-close"/>
-
 	<TableLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -136,4 +126,15 @@
 			</RadioGroup>
 		</TableRow>
 	</TableLayout>
+
+	<com.beardedhen.androidbootstrap.FontAwesomeText
+		android:id="@+id/entryperiod_close"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="top|right"
+		android:layout_margin="25dp"
+		android:textColor="#ea6153"
+		android:textSize="30sp"
+		app:fa_icon="fa-close"/>
+
 </FrameLayout>

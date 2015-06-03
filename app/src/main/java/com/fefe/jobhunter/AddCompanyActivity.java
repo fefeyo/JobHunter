@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ import java.util.List;
 ・色選択しているのにNullが入る　解決　理由：ヘッダーをつけていたため
 ・選考を追加して完了すると落ちる(エントリー締め切りが怪しい)　解決　理由：ラジオボタンのNull
 ・TODO:最新の面接にしか削除ボタンが付かないようにする
+・削除ボタンが見えない、なぜだ
 　*/
 
 public class AddCompanyActivity extends ActionBarActivity {
@@ -225,6 +227,9 @@ public class AddCompanyActivity extends ActionBarActivity {
         guidance_place = (BootstrapEditText) v.findViewById(R.id.guidance_place);
         guidance_date = (DatePicker) v.findViewById(R.id.guidance_date);
         guidance_time = (TimePicker) v.findViewById(R.id.guidance_time);
+        guidance_time.setCurrentHour(0);
+        guidance_time.setCurrentMinute(0);
+        guidance_time.setIs24HourView(true);
         isGuidance = true;
         v.findViewById(R.id.guidance_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,6 +285,9 @@ public class AddCompanyActivity extends ActionBarActivity {
         groupdiscussion_clothes = (RadioGroup) v.findViewById(R.id.group_discussion_clothes);
         groupdiscussion_date = (DatePicker) v.findViewById(R.id.group_discussion_date);
         groupdiscussion_time = (TimePicker) v.findViewById(R.id.group_discussion_time);
+        groupdiscussion_time.setCurrentHour(0);
+        groupdiscussion_time.setCurrentMinute(0);
+        groupdiscussion_time.setIs24HourView(true);
         isGroupDiscussion = true;
         v.findViewById(R.id.groupdiscussion_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -300,6 +308,9 @@ public class AddCompanyActivity extends ActionBarActivity {
         RadioGroup interview_clothes = (RadioGroup) v.findViewById(R.id.interview_clothes);
         DatePicker interview_date = (DatePicker) v.findViewById(R.id.interview_date);
         TimePicker interview_time = (TimePicker) v.findViewById(R.id.interview_time);
+        interview_time.setCurrentHour(0);
+        interview_time.setCurrentMinute(0);
+        interview_time.setIs24HourView(true);
         RadioGroup interview_format = (RadioGroup) v.findViewById(R.id.interview_format);
         CheckBox interview_student = (CheckBox) v.findViewById(R.id.interview_person_student);
         CheckBox interview_cto = (CheckBox) v.findViewById(R.id.interview_person_cto);
@@ -343,6 +354,9 @@ public class AddCompanyActivity extends ActionBarActivity {
         finalInterview_clothes = (RadioGroup) v.findViewById(R.id.interview_clothes);
         finalInterview_date = (DatePicker) v.findViewById(R.id.interview_date);
         finalInterview_time = (TimePicker) v.findViewById(R.id.interview_time);
+        finalInterview_time.setCurrentHour(0);
+        finalInterview_time.setCurrentMinute(0);
+        finalInterview_time.setIs24HourView(true);
         finalInterview_format = (RadioGroup) v.findViewById(R.id.interview_format);
         finalInterview_student = (CheckBox) v.findViewById(R.id.interview_person_student);
         finalInterview_cto = (CheckBox) v.findViewById(R.id.interview_person_cto);
@@ -366,6 +380,7 @@ public class AddCompanyActivity extends ActionBarActivity {
         entryperiod_format = (RadioGroup) v.findViewById(R.id.entry_period_format);
         entryperiod_date = (DatePicker) v.findViewById(R.id.entry_period_date);
         isEntryPeriod = true;
+        final FontAwesomeText t = (FontAwesomeText) v.findViewById(R.id.entryperiod_close);
         v.findViewById(R.id.entryperiod_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -414,299 +429,319 @@ public class AddCompanyActivity extends ActionBarActivity {
         } else {
             return;
         }
-        data.position = company_place.getText().toString();
-        data.time = getToday();
-        if (isGuidance) {
-            data.guidance_place = guidance_place.getText().toString();
-            data.guidance_month = getMonth(guidance_date);
-            data.guidance_day = getDay(guidance_date);
-            data.guidance_time = getTime(guidance_time);
-            data.used_guidance = true;
+        if (isEntryPeriod || isEntrySeat || isFinalInterview || isGroupDiscussion || isGuidance || isInterview || isPersonalSeat) {
+            data.position = company_place.getText().toString();
+            data.time = getToday();
+            if (isGuidance) {
+                data.guidance_place = guidance_place.getText().toString();
+                data.guidance_month = getMonth(guidance_date);
+                data.guidance_day = getDay(guidance_date);
+                data.guidance_time = getTime(guidance_time);
+                data.used_guidance = true;
 
-            insertItem = new CalendarInsertItem();
-            final Calendar start = Calendar.getInstance();
-            start.set(mNow.get(Calendar.YEAR), guidance_date.getMonth(), guidance_date.getDayOfMonth());
-            insertItem.setCompanyName(company_name.getText().toString());
-            insertItem.setDescription(company_name.getText().toString() + "の説明会");
-            insertItem.setEventName("説明会");
-            insertItem.setStart(start);
-            insertItem.setPlace(guidance_place.getText().toString());
-            insertItemList.add(insertItem);
+                insertItem = new CalendarInsertItem();
+                final Calendar start = Calendar.getInstance();
+                start.set(mNow.get(Calendar.YEAR), guidance_date.getMonth(), guidance_date.getDayOfMonth());
+                insertItem.setCompanyName(company_name.getText().toString());
+                insertItem.setDescription(company_name.getText().toString() + "の説明会");
+                insertItem.setEventName("説明会");
+                insertItem.setStart(start);
+                insertItem.setEnd(start);
+                insertItem.setPlace(guidance_place.getText().toString());
+                insertItemList.add(insertItem);
 
-        }
-        if (isEntrySeat) {
-            data.entryseat_start_month = getMonth(entryseat_start);
-            data.entryseat_start_day = getDay(entryseat_start);
-            data.entryseat_end_month = getMonth(entryseat_end);
-            data.entryseat_end_day = getDay(entryseat_end);
-            if (!checkRadio(entryseat_system)) {
-                data.entryseat_system = getRadio(entryseat_system);
-            } else {
-                radioAlert("エントリーシート");
-                flag = true;
             }
-            data.entryseat_contains = entryseat_contains.getText().toString();
-            data.used_entryseat = true;
+            if (isEntrySeat) {
+                data.entryseat_start_month = getMonth(entryseat_start);
+                data.entryseat_start_day = getDay(entryseat_start);
+                data.entryseat_end_month = getMonth(entryseat_end);
+                data.entryseat_end_day = getDay(entryseat_end);
+                if (!checkRadio(entryseat_system)) {
+                    data.entryseat_system = getRadio(entryseat_system);
+                } else {
+                    radioAlert("エントリーシート");
+                    flag = true;
+                }
+                data.entryseat_contains = entryseat_contains.getText().toString();
+                data.used_entryseat = true;
 
-            final Calendar start = Calendar.getInstance();
-            start.set(mNow.get(Calendar.YEAR), entryseat_start.getMonth(), entryseat_start.getDayOfMonth());
-            final Calendar end = Calendar.getInstance();
-            end.set(mNow.get(Calendar.YEAR), entryseat_end.getMonth(), entryseat_end.getDayOfMonth());
-            insertItem = new CalendarInsertItem();
-            insertItem.setCompanyName(company_name.getText().toString());
-            insertItem.setEventName("エントリーシート");
-            insertItem.setDescription(entryseat_contains.getText().toString());
-            insertItem.setStart(start);
-            insertItem.setEnd(end);
-            insertItemList.add(insertItem);
-        }
-        if (isPersonalSeat) {
-            data.personal_start_month = getMonth(personalseat_start);
-            data.personal_start_day = getDay(personalseat_start);
-            data.personal_end_month = getMonth(personalseat_end);
-            data.personal_end_day = getDay(personalseat_end);
-            if (!checkRadio(personalseat_system) && !checkRadio(personalseat_format)) {
-                data.personalseat_system = getRadio(personalseat_system);
-                data.personalseat_format = getRadio(personalseat_format);
-            } else {
-                radioAlert("履歴書");
-                flag = true;
+                final Calendar start = Calendar.getInstance();
+                start.set(mNow.get(Calendar.YEAR), entryseat_start.getMonth(), entryseat_start.getDayOfMonth());
+                final Calendar end = Calendar.getInstance();
+                end.set(mNow.get(Calendar.YEAR), entryseat_end.getMonth(), entryseat_end.getDayOfMonth());
+                insertItem = new CalendarInsertItem();
+                insertItem.setCompanyName(company_name.getText().toString());
+                insertItem.setEventName("エントリーシート");
+                insertItem.setDescription(entryseat_contains.getText().toString());
+                insertItem.setStart(start);
+                insertItem.setEnd(end);
+                insertItem.setPlace("");
+                insertItemList.add(insertItem);
             }
-            data.used_personalseat = true;
+            if (isPersonalSeat) {
+                data.personal_start_month = getMonth(personalseat_start);
+                data.personal_start_day = getDay(personalseat_start);
+                data.personal_end_month = getMonth(personalseat_end);
+                data.personal_end_day = getDay(personalseat_end);
+                if (!checkRadio(personalseat_system) && !checkRadio(personalseat_format)) {
+                    data.personalseat_system = getRadio(personalseat_system);
+                    data.personalseat_format = getRadio(personalseat_format);
+                } else {
+                    radioAlert("履歴書");
+                    flag = true;
+                }
+                data.used_personalseat = true;
 
-            final Calendar start = Calendar.getInstance();
-            start.set(mNow.get(Calendar.YEAR), personalseat_start.getMonth(), personalseat_start.getDayOfMonth());
-            final Calendar end = Calendar.getInstance();
-            end.set(mNow.get(Calendar.YEAR), personalseat_end.getMonth(), personalseat_end.getDayOfMonth());
-            insertItem = new CalendarInsertItem();
-            insertItem.setCompanyName(company_name.getText().toString());
-            insertItem.setDescription(company_name.getText().toString()+"の履歴書");
-            insertItem.setEventName("履歴書");
-            insertItem.setStart(start);
-            insertItem.setEnd(end);
-            insertItemList.add(insertItem);
-        }
-        if (isGroupDiscussion) {
-            data.groupdiscussion_place = groupdiscussion_place.getText().toString();
-            if (!checkRadio(groupdiscussion_clothes)) {
-                data.groupdiscussion_clothes = getRadio(groupdiscussion_clothes);
-            } else {
-                radioAlert("グループディスカッション");
-                flag = true;
+                final Calendar start = Calendar.getInstance();
+                start.set(mNow.get(Calendar.YEAR), personalseat_start.getMonth(), personalseat_start.getDayOfMonth());
+                final Calendar end = Calendar.getInstance();
+                end.set(mNow.get(Calendar.YEAR), personalseat_end.getMonth(), personalseat_end.getDayOfMonth());
+                insertItem = new CalendarInsertItem();
+                insertItem.setCompanyName(company_name.getText().toString());
+                insertItem.setDescription(company_name.getText().toString() + "の履歴書");
+                insertItem.setEventName("履歴書");
+                insertItem.setPlace("");
+                insertItem.setStart(start);
+                insertItem.setEnd(end);
+                insertItemList.add(insertItem);
             }
-            data.groupdiscussion_month = getMonth(groupdiscussion_date);
-            data.groupdiscussion_day = getDay(groupdiscussion_date);
-            data.groupdiscussion_time = getTime(groupdiscussion_time);
-            data.used_groupdiscussion = true;
+            if (isGroupDiscussion) {
+                data.groupdiscussion_place = groupdiscussion_place.getText().toString();
+                if (!checkRadio(groupdiscussion_clothes)) {
+                    data.groupdiscussion_clothes = getRadio(groupdiscussion_clothes);
+                } else {
+                    radioAlert("グループディスカッション");
+                    flag = true;
+                }
+                data.groupdiscussion_month = getMonth(groupdiscussion_date);
+                data.groupdiscussion_day = getDay(groupdiscussion_date);
+                data.groupdiscussion_time = getTime(groupdiscussion_time);
+                data.used_groupdiscussion = true;
 
-            final Calendar start = Calendar.getInstance();
-            start.set(mNow.get(Calendar.YEAR), groupdiscussion_date.getMonth(), guidance_date.getDayOfMonth());
-            insertItem = new CalendarInsertItem();
-            insertItem.setCompanyName(company_name.getText().toString());
-            insertItem.setEventName("グループディスカッション");
-            insertItem.setDescription(company_name.getText().toString()+"のグループディスカッション");
-            insertItem.setStart(start);
-            insertItem.setPlace(groupdiscussion_place.getText().toString());
-            insertItemList.add(insertItem);
-        }
-        if (isInterview) {
-            for (int i = 1; interview_item.size() + 1 > i; i++) {
-                InterviewItem item = interview_item.get(i);
-                if (i == 1) {
-                    data.interview_place_one = item.getInterview_place().getText().toString();
-                    data.interview_month_one = getMonth(item.getInterview_date());
-                    data.interview_day_one = getDay(item.getInterview_date());
-                    data.interview_time_one = getTime(item.getInterview_time());
-                    if (!checkRadio(item.getInterview_clothes()) && !checkRadio(item.getInterview_format())) {
-                        data.interview_clothes_one = getRadio(item.getInterview_clothes());
-                        data.interview_format_one = getRadio(item.getInterview_format());
-                    } else {
-                        radioAlert(i + "次面接");
-                        flag = true;
+                final Calendar start = Calendar.getInstance();
+                start.set(mNow.get(Calendar.YEAR), groupdiscussion_date.getMonth(), groupdiscussion_date.getDayOfMonth());
+                insertItem = new CalendarInsertItem();
+                insertItem.setCompanyName(company_name.getText().toString());
+                insertItem.setEventName("グループディスカッション");
+                insertItem.setDescription(company_name.getText().toString() + "のグループディスカッション");
+                insertItem.setStart(start);
+                insertItem.setEnd(start);
+                insertItem.setPlace(groupdiscussion_place.getText().toString());
+                insertItemList.add(insertItem);
+            }
+            if (isInterview) {
+                for (int i = 1; interview_item.size() + 1 > i; i++) {
+                    InterviewItem item = interview_item.get(i);
+                    if (i == 1) {
+                        data.interview_place_one = item.getInterview_place().getText().toString();
+                        data.interview_month_one = getMonth(item.getInterview_date());
+                        data.interview_day_one = getDay(item.getInterview_date());
+                        data.interview_time_one = getTime(item.getInterview_time());
+                        if (!checkRadio(item.getInterview_clothes()) && !checkRadio(item.getInterview_format())) {
+                            data.interview_clothes_one = getRadio(item.getInterview_clothes());
+                            data.interview_format_one = getRadio(item.getInterview_format());
+                        } else {
+                            radioAlert(i + "次面接");
+                            flag = true;
+                        }
+                        data.interview_person_student_one = item.getInterview_student().isChecked();
+                        data.interview_person_cto_one = item.getInterview_cto().isChecked();
+                        data.interview_person_ceo_one = item.getInterview_ceo().isChecked();
+                        data.interview_person_hr_one = item.getInterview_hr().isChecked();
+                        data.used_interview_one = true;
+
+                        final Calendar start = Calendar.getInstance();
+                        start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
+                        insertItem = new CalendarInsertItem();
+                        insertItem.setCompanyName(company_name.getText().toString());
+                        insertItem.setEventName("1次面接");
+                        insertItem.setStart(start);
+                        insertItem.setEnd(start);
+                        insertItem.setDescription(company_name + "の1次面接");
+                        insertItem.setPlace(item.getInterview_place().getText().toString());
+                        insertItemList.add(insertItem);
+
+                    } else if (i == 2) {
+                        data.interview_place_twe = item.getInterview_place().getText().toString();
+                        data.interview_month_twe = getMonth(item.getInterview_date());
+                        data.interview_day_twe = getDay(item.getInterview_date());
+                        data.interview_time_twe = getTime(item.getInterview_time());
+                        if (!checkRadio(item.getInterview_clothes()) && !checkRadio(item.getInterview_format())) {
+                            data.interview_clothes_twe = getRadio(item.getInterview_clothes());
+                            data.interview_format_twe = getRadio(item.getInterview_format());
+                        } else {
+                            radioAlert(i + "次面接");
+                            flag = true;
+                        }
+                        data.interview_person_student_twe = item.getInterview_student().isChecked();
+                        data.interview_person_cto_twe = item.getInterview_cto().isChecked();
+                        data.interview_person_ceo_twe = item.getInterview_ceo().isChecked();
+                        data.interview_person_hr_twe = item.getInterview_hr().isChecked();
+                        data.used_interview_twe = true;
+
+                        final Calendar start = Calendar.getInstance();
+                        start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
+                        insertItem = new CalendarInsertItem();
+                        insertItem.setCompanyName(company_name.getText().toString());
+                        insertItem.setEventName("2次面接");
+                        insertItem.setStart(start);
+                        insertItem.setEnd(start);
+                        insertItem.setDescription(company_name + "の2次面接");
+                        insertItem.setPlace(item.getInterview_place().getText().toString());
+                        insertItemList.add(insertItem);
+
+                    } else if (i == 3) {
+                        data.interview_place_three = item.getInterview_place().getText().toString();
+                        data.interview_month_three = getMonth(item.getInterview_date());
+                        data.interview_day_three = getDay(item.getInterview_date());
+                        data.interview_time_three = getTime(item.getInterview_time());
+                        if (!checkRadio(item.getInterview_clothes()) && !checkRadio(item.getInterview_format())) {
+                            data.interview_clothes_three = getRadio(item.getInterview_clothes());
+                            data.interview_format_three = getRadio(item.getInterview_format());
+                        } else {
+                            radioAlert(i + "次面接");
+                            flag = true;
+                        }
+                        data.interview_person_student_three = item.getInterview_student().isChecked();
+                        data.interview_person_cto_three = item.getInterview_cto().isChecked();
+                        data.interview_person_ceo_three = item.getInterview_ceo().isChecked();
+                        data.interview_person_hr_three = item.getInterview_hr().isChecked();
+                        data.used_interview_three = true;
+
+                        final Calendar start = Calendar.getInstance();
+                        start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
+                        insertItem = new CalendarInsertItem();
+                        insertItem.setCompanyName(company_name.getText().toString());
+                        insertItem.setEventName("3次面接");
+                        insertItem.setStart(start);
+                        insertItem.setEnd(start);
+                        insertItem.setDescription(company_name.getText().toString() + "の3次面接");
+                        insertItem.setPlace(item.getInterview_place().getText().toString());
+                        insertItemList.add(insertItem);
+
+                    } else if (i == 4) {
+                        data.interview_place_four = item.getInterview_place().getText().toString();
+                        data.interview_month_four = getMonth(item.getInterview_date());
+                        data.interview_day_four = getDay(item.getInterview_date());
+                        data.interview_time_four = getTime(item.getInterview_time());
+                        if (!checkRadio(item.getInterview_clothes()) && !checkRadio(item.getInterview_format())) {
+                            data.interview_clothes_four = getRadio(item.getInterview_clothes());
+                            data.interview_format_four = getRadio(item.getInterview_format());
+                        } else {
+                            radioAlert(i + "次面接");
+                            flag = true;
+                        }
+                        data.interview_person_student_four = item.getInterview_student().isChecked();
+                        data.interview_person_cto_four = item.getInterview_cto().isChecked();
+                        data.interview_person_ceo_four = item.getInterview_ceo().isChecked();
+                        data.interview_person_hr_four = item.getInterview_hr().isChecked();
+                        data.used_interview_four = true;
+
+                        final Calendar start = Calendar.getInstance();
+                        start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
+                        insertItem = new CalendarInsertItem();
+                        insertItem.setCompanyName(company_name.getText().toString());
+                        insertItem.setEventName("4次面接");
+                        insertItem.setStart(start);
+                        insertItem.setEnd(start);
+                        insertItem.setDescription(company_name + "の4次面接");
+                        insertItem.setPlace(item.getInterview_place().getText().toString());
+                        insertItemList.add(insertItem);
+
+                    } else if (i == 5) {
+                        data.interview_place_five = item.getInterview_place().getText().toString();
+                        data.interview_month_five = getMonth(item.getInterview_date());
+                        data.interview_day_five = getDay(item.getInterview_date());
+                        data.interview_time_five = getTime(item.getInterview_time());
+                        if (!checkRadio(item.getInterview_clothes()) && !checkRadio(item.getInterview_format())) {
+                            data.interview_clothes_five = getRadio(item.getInterview_clothes());
+                            data.interview_format_five = getRadio(item.getInterview_format());
+                        } else {
+                            radioAlert(i + "次面接");
+                            flag = true;
+                        }
+                        data.interview_person_student_five = item.getInterview_student().isChecked();
+                        data.interview_person_cto_five = item.getInterview_cto().isChecked();
+                        data.interview_person_ceo_five = item.getInterview_ceo().isChecked();
+                        data.interview_person_hr_five = item.getInterview_hr().isChecked();
+                        data.used_interview_five = true;
+
+                        final Calendar start = Calendar.getInstance();
+                        start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
+                        insertItem = new CalendarInsertItem();
+                        insertItem.setCompanyName(company_name.getText().toString());
+                        insertItem.setEventName("5次面接");
+                        insertItem.setDescription(company_name + "の5次面接");
+                        insertItem.setStart(start);
+                        insertItem.setEnd(start);
+                        insertItem.setPlace(item.getInterview_place().getText().toString());
+                        insertItemList.add(insertItem);
                     }
-                    data.interview_person_student_one = item.getInterview_student().isChecked();
-                    data.interview_person_cto_one = item.getInterview_cto().isChecked();
-                    data.interview_person_ceo_one = item.getInterview_ceo().isChecked();
-                    data.interview_person_hr_one = item.getInterview_hr().isChecked();
-                    data.used_interview_one = true;
-
-                    final Calendar start = Calendar.getInstance();
-                    start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
-                    insertItem = new CalendarInsertItem();
-                    insertItem.setCompanyName(company_name.getText().toString());
-                    insertItem.setEventName("1次面接");
-                    insertItem.setStart(start);
-                    insertItem.setDescription(company_name+"の1次面接");
-                    insertItem.setPlace(item.getInterview_place().getText().toString());
-                    insertItemList.add(insertItem);
-
-                } else if (i == 2) {
-                    data.interview_place_twe = item.getInterview_place().getText().toString();
-                    data.interview_month_twe = getMonth(item.getInterview_date());
-                    data.interview_day_twe = getDay(item.getInterview_date());
-                    data.interview_time_twe = getTime(item.getInterview_time());
-                    if (!checkRadio(item.getInterview_clothes()) && !checkRadio(item.getInterview_format())) {
-                        data.interview_clothes_twe = getRadio(item.getInterview_clothes());
-                        data.interview_format_twe = getRadio(item.getInterview_format());
-                    } else {
-                        radioAlert(i + "次面接");
-                        flag = true;
-                    }
-                    data.interview_person_student_twe = item.getInterview_student().isChecked();
-                    data.interview_person_cto_twe = item.getInterview_cto().isChecked();
-                    data.interview_person_ceo_twe = item.getInterview_ceo().isChecked();
-                    data.interview_person_hr_twe = item.getInterview_hr().isChecked();
-                    data.used_interview_twe = true;
-
-                    final Calendar start = Calendar.getInstance();
-                    start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
-                    insertItem = new CalendarInsertItem();
-                    insertItem.setCompanyName(company_name.getText().toString());
-                    insertItem.setEventName("2次面接");
-                    insertItem.setStart(start);
-                    insertItem.setDescription(company_name + "の2次面接");
-                    insertItem.setPlace(item.getInterview_place().getText().toString());
-                    insertItemList.add(insertItem);
-
-                } else if (i == 3) {
-                    data.interview_place_three = item.getInterview_place().getText().toString();
-                    data.interview_month_three = getMonth(item.getInterview_date());
-                    data.interview_day_three = getDay(item.getInterview_date());
-                    data.interview_time_three = getTime(item.getInterview_time());
-                    if (!checkRadio(item.getInterview_clothes()) && !checkRadio(item.getInterview_format())) {
-                        data.interview_clothes_three = getRadio(item.getInterview_clothes());
-                        data.interview_format_three = getRadio(item.getInterview_format());
-                    } else {
-                        radioAlert(i + "次面接");
-                        flag = true;
-                    }
-                    data.interview_person_student_three = item.getInterview_student().isChecked();
-                    data.interview_person_cto_three = item.getInterview_cto().isChecked();
-                    data.interview_person_ceo_three = item.getInterview_ceo().isChecked();
-                    data.interview_person_hr_three = item.getInterview_hr().isChecked();
-                    data.used_interview_three = true;
-
-                    final Calendar start = Calendar.getInstance();
-                    start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
-                    insertItem = new CalendarInsertItem();
-                    insertItem.setCompanyName(company_name.getText().toString());
-                    insertItem.setEventName("3次面接");
-                    insertItem.setStart(start);
-                    insertItem.setDescription(company_name.getText().toString()+"の3次面接");
-                    insertItem.setPlace(item.getInterview_place().getText().toString());
-                    insertItemList.add(insertItem);
-
-                } else if (i == 4) {
-                    data.interview_place_four = item.getInterview_place().getText().toString();
-                    data.interview_month_four = getMonth(item.getInterview_date());
-                    data.interview_day_four = getDay(item.getInterview_date());
-                    data.interview_time_four = getTime(item.getInterview_time());
-                    if (!checkRadio(item.getInterview_clothes()) && !checkRadio(item.getInterview_format())) {
-                        data.interview_clothes_four = getRadio(item.getInterview_clothes());
-                        data.interview_format_four = getRadio(item.getInterview_format());
-                    } else {
-                        radioAlert(i + "次面接");
-                        flag = true;
-                    }
-                    data.interview_person_student_four = item.getInterview_student().isChecked();
-                    data.interview_person_cto_four = item.getInterview_cto().isChecked();
-                    data.interview_person_ceo_four = item.getInterview_ceo().isChecked();
-                    data.interview_person_hr_four = item.getInterview_hr().isChecked();
-                    data.used_interview_four = true;
-
-                    final Calendar start = Calendar.getInstance();
-                    start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
-                    insertItem = new CalendarInsertItem();
-                    insertItem.setCompanyName(company_name.getText().toString());
-                    insertItem.setEventName("4次面接");
-                    insertItem.setStart(start);
-                    insertItem.setDescription(company_name + "の4次面接");
-                    insertItem.setPlace(item.getInterview_place().getText().toString());
-                    insertItemList.add(insertItem);
-
-                } else if (i == 5) {
-                    data.interview_place_five = item.getInterview_place().getText().toString();
-                    data.interview_month_five = getMonth(item.getInterview_date());
-                    data.interview_day_five = getDay(item.getInterview_date());
-                    data.interview_time_five = getTime(item.getInterview_time());
-                    if (!checkRadio(item.getInterview_clothes()) && !checkRadio(item.getInterview_format())) {
-                        data.interview_clothes_five = getRadio(item.getInterview_clothes());
-                        data.interview_format_five = getRadio(item.getInterview_format());
-                    } else {
-                        radioAlert(i + "次面接");
-                        flag = true;
-                    }
-                    data.interview_person_student_five = item.getInterview_student().isChecked();
-                    data.interview_person_cto_five = item.getInterview_cto().isChecked();
-                    data.interview_person_ceo_five = item.getInterview_ceo().isChecked();
-                    data.interview_person_hr_five = item.getInterview_hr().isChecked();
-                    data.used_interview_five = true;
-
-                    final Calendar start = Calendar.getInstance();
-                    start.set(mNow.get(Calendar.YEAR), item.getInterview_date().getMonth(), item.getInterview_date().getDayOfMonth());
-                    insertItem = new CalendarInsertItem();
-                    insertItem.setCompanyName(company_name.getText().toString());
-                    insertItem.setEventName("5次面接");
-                    insertItem.setDescription(company_name + "の5次面接");
-                    insertItem.setStart(start);
-                    insertItem.setPlace(item.getInterview_place().getText().toString());
-                    insertItemList.add(insertItem);
                 }
             }
-        }
-        if (isFinalInterview) {
-            data.interview_place_final = finalInterview_place.getText().toString();
-            data.interview_month_final = getMonth(finalInterview_date);
-            data.interview_day_final = getDay(finalInterview_date);
-            data.interview_time_final = getTime(finalInterview_time);
-            if (!checkRadio(finalInterview_clothes) && !checkRadio(finalInterview_format)) {
-                data.interview_clothes_final = getRadio(finalInterview_clothes);
-                data.interview_format_final = getRadio(finalInterview_format);
-            } else {
-                radioAlert("最終面接");
-                flag = true;
-            }
-            data.interview_person_student_final = finalInterview_student.isChecked();
-            data.interview_person_cto_final = finalInterview_cto.isChecked();
-            data.interview_person_ceo_final = finalInterview_ceo.isChecked();
-            data.interview_person_hr_final = finalInterview_hr.isChecked();
-            data.used_interview_final = true;
+            if (isFinalInterview) {
+                data.interview_place_final = finalInterview_place.getText().toString();
+                data.interview_month_final = getMonth(finalInterview_date);
+                data.interview_day_final = getDay(finalInterview_date);
+                data.interview_time_final = getTime(finalInterview_time);
+                if (!checkRadio(finalInterview_clothes) && !checkRadio(finalInterview_format)) {
+                    data.interview_clothes_final = getRadio(finalInterview_clothes);
+                    data.interview_format_final = getRadio(finalInterview_format);
+                } else {
+                    radioAlert("最終面接");
+                    flag = true;
+                }
+                data.interview_person_student_final = finalInterview_student.isChecked();
+                data.interview_person_cto_final = finalInterview_cto.isChecked();
+                data.interview_person_ceo_final = finalInterview_ceo.isChecked();
+                data.interview_person_hr_final = finalInterview_hr.isChecked();
+                data.used_interview_final = true;
 
-            final Calendar start = Calendar.getInstance();
-            start.set(mNow.get(Calendar.YEAR), finalInterview_date.getMonth(), finalInterview_date.getDayOfMonth());
-            insertItem = new CalendarInsertItem();
-            insertItem.setCompanyName(company_name.getText().toString());
-            insertItem.setEventName("最終面接");
-            insertItem.setDescription(company_name + "の最終面接");
-            insertItem.setStart(start);
-            insertItem.setPlace(finalInterview_place.getText().toString());
-            insertItemList.add(insertItem);
-        }
-        if (isEntryPeriod) {
-            if (!checkRadio(entryperiod_system) && !checkRadio(entryperiod_format)) {
-                data.entryperiod_system = getRadio(entryperiod_system);
-                data.entryperiod_format = getRadio(entryperiod_format);
-            } else {
-                radioAlert("エントリー締め切り");
-                flag = true;
+                final Calendar start = Calendar.getInstance();
+                start.set(mNow.get(Calendar.YEAR), finalInterview_date.getMonth(), finalInterview_date.getDayOfMonth());
+                insertItem = new CalendarInsertItem();
+                insertItem.setCompanyName(company_name.getText().toString());
+                insertItem.setEventName("最終面接");
+                insertItem.setDescription(company_name + "の最終面接");
+                insertItem.setStart(start);
+                insertItem.setEnd(start);
+                insertItem.setPlace(finalInterview_place.getText().toString());
+                insertItemList.add(insertItem);
             }
-            data.entryperiod_month = getMonth(entryperiod_date);
-            data.entryperiod_day = getDay(entryperiod_date);
-            data.used_entryperiod = true;
+            if (isEntryPeriod) {
+                if (!checkRadio(entryperiod_system) && !checkRadio(entryperiod_format)) {
+                    data.entryperiod_system = getRadio(entryperiod_system);
+                    data.entryperiod_format = getRadio(entryperiod_format);
+                } else {
+                    radioAlert("エントリー締め切り");
+                    flag = true;
+                }
+                data.entryperiod_month = getMonth(entryperiod_date);
+                data.entryperiod_day = getDay(entryperiod_date);
+                data.used_entryperiod = true;
 
-            final Calendar end = Calendar.getInstance();
-            end.set(mNow.get(Calendar.YEAR), entryperiod_date.getMonth(), entryperiod_date.getDayOfMonth());
-            insertItem = new CalendarInsertItem();
-            insertItem.setCompanyName(company_name.getText().toString());
-            insertItem.setEventName("エントリー締め切り");
-            insertItem.setDescription(company_name + "のエントリー締め切り");
-            insertItem.setStart(end);
-        }
-        data.color = labelColor;
-        if (!flag) {
-            data.save();
-            insertCalendar();
-            finish();
+                final Calendar end = Calendar.getInstance();
+                end.set(mNow.get(Calendar.YEAR), entryperiod_date.getMonth(), entryperiod_date.getDayOfMonth());
+                insertItem = new CalendarInsertItem();
+                insertItem.setCompanyName(company_name.getText().toString());
+                insertItem.setEventName("エントリー締め切り");
+                insertItem.setDescription(company_name + "のエントリー締め切り");
+                insertItem.setStart(end);
+                insertItem.setEnd(end);
+                insertItem.setPlace("");
+            }
+            data.color = labelColor;
+            if (!flag) {
+                data.save();
+                insertCalendar();
+                finish();
+            }
+        } else {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("確認");
+            builder.setMessage("1つ以上の選考を登録してください");
+            builder.setPositiveButton("OK", null);
+            builder.create().show();
         }
     }
 
@@ -842,6 +877,12 @@ public class AddCompanyActivity extends ActionBarActivity {
                 map.put(4, "面接");
                 interview_count--;
                 count--;
+                if (interview_count > 1) {
+                    deleteList.get(interview_count - 1).setVisibility(View.VISIBLE);
+                } else if (interview_count == 1) {
+                    isInterview = false;
+                    deleteList.get(interview_count).setVisibility(View.VISIBLE);
+                }
                 break;
             case 5:
                 map.put(5, "最終面接");
@@ -877,13 +918,7 @@ public class AddCompanyActivity extends ActionBarActivity {
                 builder.setTitle("重複");
                 builder.setMessage("同じ名前の会社名が登録されています。\n確認して下さい。");
                 builder.setCancelable(false);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.create().show();
+                builder.setPositiveButton("OK", null).show();
                 break;
             }
         }
@@ -934,27 +969,30 @@ public class AddCompanyActivity extends ActionBarActivity {
      * カレンダーに登録するIntentを飛ばすメソッド
      */
     private void insertCalendar() {
-        boolean isAllDay;
-        for (CalendarInsertItem item : insertItemList) {
-            if(item.getEnd() == null){
-                isAllDay = true;
-            }else{
-                isAllDay = false;
-            }
-            //　イベントの登録
-            final ContentResolver cr = getContentResolver();
-            final ContentValues values = new ContentValues();
-            values.put(CalendarContract.Events.DTSTART, item.getStart().getTimeInMillis());
-            values.put(CalendarContract.Events.DTEND, item.getEnd().getTimeInMillis());
-            values.put(CalendarContract.Events.EVENT_TIMEZONE, Time.getCurrentTimezone());
-            values.put(CalendarContract.Events.TITLE, item.getEventName());
-            values.put(CalendarContract.Events.DESCRIPTION, item.getDescription());
-            values.put(CalendarContract.Events.ALL_DAY, isAllDay);
-            values.put(CalendarContract.Events.EVENT_LOCATION, item.getPlace());
-            values.put(CalendarContract.Events.CALENDAR_DISPLAY_NAME, item.getCompanyName());
-            values.put(CalendarContract.Events.CALENDAR_ID, 1);
+        final SharedPreferences sp = getSharedPreferences("jobhunter", MODE_PRIVATE);
+        if (sp.getBoolean("save", false)) {
+            boolean isAllDay;
+            for (CalendarInsertItem item : insertItemList) {
+                if (item.getEnd() == item.getStart()) {
+                    isAllDay = true;
+                } else {
+                    isAllDay = false;
+                }
+                //　イベントの登録
+                final ContentResolver cr = getContentResolver();
+                final ContentValues values = new ContentValues();
+                values.put(CalendarContract.Events.DTSTART, item.getStart().getTimeInMillis());
+                values.put(CalendarContract.Events.DTEND, item.getEnd().getTimeInMillis());
+                values.put(CalendarContract.Events.ALL_DAY, isAllDay);
+                values.put(CalendarContract.Events.EVENT_TIMEZONE, Time.getCurrentTimezone());
+                values.put(CalendarContract.Events.TITLE, item.getEventName());
+//                values.put(CalendarContract.Events.CALENDAR_DISPLAY_NAME, item.getCompanyName());
+                values.put(CalendarContract.Events.DESCRIPTION, item.getDescription());
+                values.put(CalendarContract.Events.EVENT_LOCATION, item.getPlace());
+                values.put(CalendarContract.Events.CALENDAR_ID, 1);
 
-            cr.insert(CalendarContract.Events.CONTENT_URI, values);
+                cr.insert(CalendarContract.Events.CONTENT_URI, values);
+            }
         }
     }
 }
