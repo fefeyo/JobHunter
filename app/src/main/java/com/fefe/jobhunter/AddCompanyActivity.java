@@ -221,7 +221,11 @@ public class AddCompanyActivity extends ActionBarActivity {
 
     public void setGuidance() {
         final View v = getLayoutInflater().inflate(R.layout.guidance, null);
-        v.findViewById(R.id.guidance_date).findViewById(yearId).setVisibility(View.GONE);
+        try {
+            v.findViewById(R.id.guidance_date).findViewById(yearId).setVisibility(View.GONE);
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
         v.setAnimation(getAnimation(0, 1, 500));
         layout.addView(v);
         guidance_place = (BootstrapEditText) v.findViewById(R.id.guidance_place);
@@ -241,8 +245,12 @@ public class AddCompanyActivity extends ActionBarActivity {
 
     public void setEntrySeat() {
         final View v = getLayoutInflater().inflate(R.layout.entry_seat, null);
-        v.findViewById(R.id.entry_seat_start).findViewById(yearId).setVisibility(View.GONE);
-        v.findViewById(R.id.entry_seat_end).findViewById(yearId).setVisibility(View.GONE);
+        try {
+            v.findViewById(R.id.entry_seat_start).findViewById(yearId).setVisibility(View.GONE);
+            v.findViewById(R.id.entry_seat_end).findViewById(yearId).setVisibility(View.GONE);
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
         entryseat_start = (DatePicker) v.findViewById(R.id.entry_seat_start);
         entryseat_end = (DatePicker) v.findViewById(R.id.entry_seat_end);
@@ -280,7 +288,11 @@ public class AddCompanyActivity extends ActionBarActivity {
 
     public void setGroupDiscussion() {
         final View v = getLayoutInflater().inflate(R.layout.group_discussion, null);
-        v.findViewById(R.id.group_discussion_date).findViewById(yearId).setVisibility(View.GONE);
+        try {
+            v.findViewById(R.id.group_discussion_date).findViewById(yearId).setVisibility(View.GONE);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         groupdiscussion_place = (BootstrapEditText) v.findViewById(R.id.group_discussion_place);
         groupdiscussion_clothes = (RadioGroup) v.findViewById(R.id.group_discussion_clothes);
         groupdiscussion_date = (DatePicker) v.findViewById(R.id.group_discussion_date);
@@ -301,7 +313,11 @@ public class AddCompanyActivity extends ActionBarActivity {
 
     public void setInterview(String count) {
         final View v = getLayoutInflater().inflate(R.layout.interview, null);
-        v.findViewById(R.id.interview_date).findViewById(yearId).setVisibility(View.GONE);
+        try {
+            v.findViewById(R.id.interview_date).findViewById(yearId).setVisibility(View.GONE);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         TextView interview_name = (TextView) v.findViewById(R.id.interview_count);
         interview_name.setText(count + "面接");
         interview_place = (BootstrapEditText) v.findViewById(R.id.interview_place);
@@ -347,7 +363,11 @@ public class AddCompanyActivity extends ActionBarActivity {
 
     public void setFinalInterview() {
         final View v = getLayoutInflater().inflate(R.layout.interview, null);
-        v.findViewById(R.id.interview_date).findViewById(yearId).setVisibility(View.GONE);
+        try {
+            v.findViewById(R.id.interview_date).findViewById(yearId).setVisibility(View.GONE);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         TextView interview_count = (TextView) v.findViewById(R.id.interview_count);
         interview_count.setText("最終面接");
         finalInterview_place = (BootstrapEditText) v.findViewById(R.id.interview_place);
@@ -375,7 +395,11 @@ public class AddCompanyActivity extends ActionBarActivity {
 
     public void setEntryPeriod() {
         final View v = getLayoutInflater().inflate(R.layout.entry_period, null);
-        v.findViewById(R.id.entry_period_date).findViewById(yearId).setVisibility(View.GONE);
+        try {
+            v.findViewById(R.id.entry_period_date).findViewById(yearId).setVisibility(View.GONE);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         entryperiod_system = (RadioGroup) v.findViewById(R.id.entry_period_system);
         entryperiod_format = (RadioGroup) v.findViewById(R.id.entry_period_format);
         entryperiod_date = (DatePicker) v.findViewById(R.id.entry_period_date);
@@ -986,7 +1010,6 @@ public class AddCompanyActivity extends ActionBarActivity {
                 values.put(CalendarContract.Events.ALL_DAY, isAllDay);
                 values.put(CalendarContract.Events.EVENT_TIMEZONE, Time.getCurrentTimezone());
                 values.put(CalendarContract.Events.TITLE, item.getEventName());
-//                values.put(CalendarContract.Events.CALENDAR_DISPLAY_NAME, item.getCompanyName());
                 values.put(CalendarContract.Events.DESCRIPTION, item.getDescription());
                 values.put(CalendarContract.Events.EVENT_LOCATION, item.getPlace());
                 values.put(CalendarContract.Events.CALENDAR_ID, 1);

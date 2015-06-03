@@ -19,8 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            NendApiKey="c5cb8bc474345961c6e7a9778c947957ed8e1e4f"
-            NendSpotId="3174"/>
+            NendApiKey="245684c2a8e9e86dd9501be58f83d85cdcc54c6c"
+            NendSpotId="380279"/>
 
         <!--
             NendApiKey="245684c2a8e9e86dd9501be58f83d85cdcc54c6c"

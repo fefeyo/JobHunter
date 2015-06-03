@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import com.fefe.jobhunter.fragment.CalendarFragment;
 import com.fefe.jobhunter.fragment.CompanyListFragment;
+import com.fefe.jobhunter.fragment.InfomationFragment;
 import com.fefe.jobhunter.fragment.SettingsFragment;
 import com.fefe.jobhunter.fragment.WeekEventFragment;
 
@@ -45,7 +46,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         arr.add("選考を追加");
 //        arr.add("カレンダー");
         arr.add("今週の選考");
-        arr.add("設定");
+        arr.add("サポート");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getApplicationContext(),
                 R.layout.simple_list_item,
@@ -54,7 +55,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         mList.setOnItemClickListener(this);
         mList.setAdapter(adapter);
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.fragment_container, new CompanyListFragment());
         ft.commit();
         scene = 0;
@@ -136,7 +137,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             case 3:
                 if (scene != 3) {
                     ft.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top, R.anim.slide_in_top, R.anim.slide_out_bottom);
-                    ft.replace(R.id.fragment_container, new SettingsFragment());
+                    ft.replace(R.id.fragment_container, new InfomationFragment());
                     ft.addToBackStack(null);
                     ft.commit();
                     scene = 3;

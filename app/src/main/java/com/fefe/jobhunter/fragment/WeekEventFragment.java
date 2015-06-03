@@ -84,12 +84,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c2 = Calendar.getInstance();
                 year = setYear(month);
                 c2.set(year, month - 1, day);
-                long until_guidance = untilInWeek(now.getTime(), c2.getTime()) - 1;
-                if (until_guidance <= 7) {
+                long until_guidance = untilInWeek(now.getTime(), c2.getTime()) ;
+                if (until_guidance <= 7 && until_guidance >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("説明会");
-                    item.setRemainder("あと" + until_guidance + "日");
+                    if(until_guidance == 0){
+                        item.setRemainder("今日！");
+                    }else {
+                        item.setRemainder("あと" + until_guidance + "日");
+                    }
                     item.setDate(month + "月" + day + "日");
                     item.setTime(data.guidance_time);
                     item.setPlace(data.guidance_place);
@@ -103,12 +107,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c3 = Calendar.getInstance();
                 year = setYear(month);
                 c3.set(year, month - 1, day);
-                long until_entryseat = untilInWeek(now.getTime(), c3.getTime()) - 1;
-                if (until_entryseat <= 7) {
+                long until_entryseat = untilInWeek(now.getTime(), c3.getTime());
+                if (until_entryseat <= 7 && until_entryseat >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("エントリーシート期限");
-                    item.setRemainder("あと" + until_entryseat + "日");
+                    if(until_entryseat == 0) {
+                        item.setRemainder("今日！");
+                    }else{
+                        item.setRemainder("あと" + until_entryseat + "日");
+                    }
                     item.setDate(month + "月" + day + "日まで");
                     item.setTime("");
                     item.setPlace("");
@@ -123,12 +131,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c4 = Calendar.getInstance();
                 year = setYear(month);
                 c4.set(year, month - 1, day);
-                long until_personal = untilInWeek(now.getTime(), c4.getTime()) - 1;
-                if (until_personal <= 7) {
+                long until_personal = untilInWeek(now.getTime(), c4.getTime());
+                if (until_personal <= 7 && until_personal >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("履歴書期限");
-                    item.setRemainder("あと" + until_personal + "日");
+                    if(until_personal == 0){
+                        item.setRemainder("今日！");
+                    }else {
+                        item.setRemainder("あと" + until_personal + "日");
+                    }
                     item.setDate(month + "月" + day + "日まで");
                     item.setTime("");
                     item.setPlace("");
@@ -143,12 +155,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c5 = Calendar.getInstance();
                 year = setYear(month);
                 c5.set(year, month - 1, day);
-                long until_group = untilInWeek(now.getTime(), c5.getTime()) - 1;
-                if (until_group <= 7) {
+                long until_group = untilInWeek(now.getTime(), c5.getTime());
+                if (until_group <= 7 && until_group >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("グループディスカッション");
-                    item.setRemainder("あと" + until_group + "日");
+                    if(until_group == 0){
+                        item.setRemainder("今日！");
+                    }else {
+                        item.setRemainder("あと" + until_group + "日");
+                    }
                     item.setDate(month + "月" + day + "日");
                     item.setTime(data.groupdiscussion_time);
                     item.setPlace(data.groupdiscussion_place);
@@ -163,12 +179,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c6 = Calendar.getInstance();
                 year = setYear(month);
                 c6.set(year, month - 1, day);
-                long until_interview_one = untilInWeek(now.getTime(), c6.getTime()) - 1;
-                if (until_interview_one <= 7) {
+                long until_interview_one = untilInWeek(now.getTime(), c6.getTime());
+                if (until_interview_one <= 7 && until_interview_one >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("１次面接");
-                    item.setRemainder("あと" + until_interview_one + "日");
+                    if(until_interview_one == 0){
+                        item.setRemainder("今日！");
+                    }else {
+                        item.setRemainder("あと" + until_interview_one + "日");
+                    }
                     item.setDate(month + "月" + day + "日");
                     item.setTime(data.interview_time_one);
                     item.setPlace(data.interview_place_one);
@@ -183,12 +203,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c7 = Calendar.getInstance();
                 year = setYear(month);
                 c7.set(year, month - 1, day);
-                long until_interview_twe = untilInWeek(now.getTime(), c7.getTime()) - 1;
-                if (until_interview_twe <= 7) {
+                long until_interview_twe = untilInWeek(now.getTime(), c7.getTime());
+                if (until_interview_twe <= 7 && until_interview_twe >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("２次面接");
-                    item.setRemainder("あと" + until_interview_twe + "日");
+                    if(until_interview_twe == 0){
+                        item.setRemainder("今日！");
+                    }else {
+                        item.setRemainder("あと" + until_interview_twe + "日");
+                    }
                     item.setDate(month + "月" + day + "日");
                     item.setTime(data.interview_time_twe);
                     item.setPlace(data.interview_place_twe);
@@ -203,12 +227,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c8 = Calendar.getInstance();
                 year = setYear(month);
                 c8.set(year, month - 1, day);
-                long until_interview_three = untilInWeek(now.getTime(), c8.getTime()) - 1;
-                if (until_interview_three <= 7) {
+                long until_interview_three = untilInWeek(now.getTime(), c8.getTime());
+                if (until_interview_three <= 7 && until_interview_three >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("３次面接");
-                    item.setRemainder("あと" + until_interview_three + "日");
+                    if(until_interview_three == 0){
+                        item.setRemainder("今日！");
+                    }else {
+                        item.setRemainder("あと" + until_interview_three + "日");
+                    }
                     item.setDate(month + "月" + day + "日");
                     item.setTime(data.interview_time_three);
                     item.setPlace(data.interview_place_three);
@@ -223,12 +251,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c9 = Calendar.getInstance();
                 year = setYear(month);
                 c9.set(year, month - 1, day);
-                long until_interview_four = untilInWeek(now.getTime(), c9.getTime()) - 1;
-                if (until_interview_four <= 7) {
+                long until_interview_four = untilInWeek(now.getTime(), c9.getTime());
+                if (until_interview_four <= 7 && until_interview_four >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("４次面接");
-                    item.setRemainder("あと" + until_interview_four + "日");
+                    if(until_interview_four == 0){
+                        item.setRemainder("今日！");
+                    }else {
+                        item.setRemainder("あと" + until_interview_four + "日");
+                    }
                     item.setDate(month + "月" + day + "日");
                     item.setTime(data.interview_time_four);
                     item.setPlace(data.interview_place_four);
@@ -243,12 +275,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c10 = Calendar.getInstance();
                 year = setYear(month);
                 c10.set(year, month - 1, day);
-                long until_interview_five = untilInWeek(now.getTime(), c10.getTime()) - 1;
-                if (until_interview_five <= 7) {
+                long until_interview_five = untilInWeek(now.getTime(), c10.getTime());
+                if (until_interview_five <= 7 && until_interview_five >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("５次面接");
-                    item.setRemainder("あと" + until_interview_five + "日");
+                    if(until_interview_five == 0){
+                        item.setRemainder("今日！");
+                    }else {
+                        item.setRemainder("あと" + until_interview_five + "日");
+                    }
                     item.setDate(month + "月" + day + "日");
                     item.setTime(data.interview_time_five);
                     item.setPlace(data.interview_place_five);
@@ -263,12 +299,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c11 = Calendar.getInstance();
                 year = setYear(month);
                 c11.set(year, month - 1, day);
-                long until_interview_final = untilInWeek(now.getTime(), c11.getTime()) - 1;
-                if (until_interview_final <= 7) {
+                long until_interview_final = untilInWeek(now.getTime(), c11.getTime());
+                if (until_interview_final <= 7 && until_interview_final >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("最終面接");
-                    item.setRemainder("あと" + until_interview_final + "日");
+                    if(until_interview_final == 0){
+                        item.setRemainder("今日！");
+                    }else {
+                        item.setRemainder("あと" + until_interview_final + "日");
+                    }
                     item.setDate(month + "月" + day + "日");
                     item.setTime(data.interview_time_final);
                     item.setPlace(data.interview_place_final);
@@ -283,12 +323,16 @@ public class WeekEventFragment extends Fragment {
                 final Calendar c12 = Calendar.getInstance();
                 year = setYear(month);
                 c12.set(year, month - 1, day);
-                long until_entryperiod = untilInWeek(now.getTime(), c12.getTime()) - 1;
-                if (until_entryperiod <= 7) {
+                long until_entryperiod = untilInWeek(now.getTime(), c12.getTime());
+                if (until_entryperiod <= 7 && until_entryperiod >= 0) {
                     final WeekeventItem item = new WeekeventItem();
                     item.setName(data.name);
                     item.setContains("エントリー締め切り");
-                    item.setRemainder("あと" + until_entryperiod + "日");
+                    if(until_entryperiod == 0){
+                        item.setRemainder("今日！");
+                    }else {
+                        item.setRemainder("あと" + until_entryperiod + "日");
+                    }
                     item.setDate(month + "月" + day + "日まで");
                     item.setTime("");
                     item.setPlace("");

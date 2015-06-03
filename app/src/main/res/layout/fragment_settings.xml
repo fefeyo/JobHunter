@@ -6,8 +6,8 @@
 	android:padding="@dimen/large">
 
 	<TableLayout
-		android:layout_gravity="center"
-		android:paddingTop="50dp"
+		android:padding="@dimen/small"
+		android:layout_gravity="top"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 

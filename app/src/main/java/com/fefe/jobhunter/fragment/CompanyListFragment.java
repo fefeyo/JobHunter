@@ -127,7 +127,7 @@ public class CompanyListFragment extends Fragment implements AdapterView.OnItemC
                         getActivity().getApplicationContext());
                 deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
                         0x3F, 0x25)));
-                deleteItem.setWidth(200);
+                deleteItem.setWidth(120);
                 deleteItem.setTitle("削除");
                 deleteItem.setTitleSize(20);
                 deleteItem.setTitleColor(Color.WHITE);
@@ -141,7 +141,6 @@ public class CompanyListFragment extends Fragment implements AdapterView.OnItemC
     public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
         switch (index){
             case 0:
-                Log.i("削除","クリック");
                 final String companyName = companies.get(position);
                 deleteCompany(companyName);
                 return true;
