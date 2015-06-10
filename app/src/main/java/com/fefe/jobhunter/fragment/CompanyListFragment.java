@@ -8,13 +8,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.activeandroid.query.Select;
 import com.fefe.jobhunter.MainActivity;
@@ -31,6 +29,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /*
 * [現在のエラー状況]
 *リストのEmptyが表示されない
@@ -39,7 +40,9 @@ import java.util.List;
 * */
 
 public class CompanyListFragment extends Fragment implements AdapterView.OnItemClickListener, SwipeMenuListView.OnMenuItemClickListener{
-    private SwipeMenuListView list;
+    @InjectView(R.id.todo_list)
+    SwipeMenuListView list;
+
     private ArrayList<CompanyListItem> arr;
     private CompanyListItem item;
     private HashMap<Integer, String> companies;
@@ -50,10 +53,17 @@ public class CompanyListFragment extends Fragment implements AdapterView.OnItemC
 
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_company_list, container, false);
-        list = (SwipeMenuListView)v.findViewById(R.id.todo_list);
+        ButterKnife.inject(this, v);
+
         createMenu(list);
         final LinearLayout empty = (LinearLayout)v.findViewById(R.id.empty_view);
         list.setEmptyView(empty);

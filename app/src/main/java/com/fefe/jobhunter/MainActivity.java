@@ -24,10 +24,16 @@ import com.fefe.jobhunter.fragment.WeekEventFragment;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
-    private ListView mList;
-    private DrawerLayout drawer;
+    @InjectView(R.id.drawer_list)
+    ListView mList;
+    @InjectView(R.id.main_drawer)
+    DrawerLayout drawer;
+
     private static int scene;
     private static ActionBar mActionBar;
 
@@ -35,12 +41,11 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setTitle("会社一覧");
         mActionBar.setIcon(getResources().getDrawable(R.drawable.ic_drawer));
-        mList = (ListView) findViewById(R.id.drawer_list);
-        drawer = (DrawerLayout) findViewById(R.id.main_drawer);
         ArrayList<String> arr = new ArrayList<>();
         arr.add("会社一覧");
         arr.add("選考を追加");

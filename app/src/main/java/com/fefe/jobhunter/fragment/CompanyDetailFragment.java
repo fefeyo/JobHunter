@@ -1,6 +1,7 @@
 package com.fefe.jobhunter.fragment;
 
 
+import static butterknife.ButterKnife.findById;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,19 +22,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * A simple {@link Fragment} subclass.
  * グループディスカッション場所
  * 面接相手＆場所（最終も）
  */
 public class CompanyDetailFragment extends Fragment {
-    private TextView detailTitle;
-    private LinearLayout layout;
-    private Data data;
 
-    private HashMap<String, Calendar> calendarList;
-    private String[] keylist;
+    @InjectView(R.id.detail_title)
+    private TextView detailTitle;
+    @InjectView(R.id.detail_container)
+    private LinearLayout layout;
+    @InjectView(R.id.detail_back)
     private ScrollView back;
+
+    private Data data;
+    private HashMap<String, Calendar> calendarList;
+
+    private String[] keylist;
 
     private String name;
 
@@ -41,19 +50,6 @@ public class CompanyDetailFragment extends Fragment {
     private boolean isInterview_one, isInterview_twe, isInterview_three, isInterview_four, isInterview_five, isFinalinterview;
 
     private int interview_count;
-
-    private void assignViews(View v) {
-        detailTitle = (TextView) v.findViewById(R.id.detail_title);
-        layout = (LinearLayout) v.findViewById(R.id.detail_container);
-        calendarList = new HashMap<>();
-        back = (ScrollView)v.findViewById(R.id.detail_back);
-//        v.findViewById(R.id.detail_scroll).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                back.fullScroll(ScrollView.FOCUS_UP);
-//            }
-//        });
-    }
 
     private void resetFlags() {
         isEntryperiod = false;
@@ -83,6 +79,7 @@ public class CompanyDetailFragment extends Fragment {
         isInterview_five = data.used_interview_five;
         isFinalinterview = data.used_interview_final;
         interview_count = 1;
+        calendarList = new HashMap<>();
         setCalendarList();
     }
 
@@ -93,7 +90,7 @@ public class CompanyDetailFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_company_detail, container, false);
-        assignViews(v);
+        ButterKnife.inject(this, v);
         resetFlags();
         final List<Data> dataList = new Select().from(Data.class).where("name = ? and time = ?", getArguments().getString("name"), getArguments().getString("time")).execute();
         data = dataList.get(0);
@@ -111,11 +108,17 @@ public class CompanyDetailFragment extends Fragment {
         resetFlags();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
+
     private void setEntryperiod() {
         final View v = getActivity().getLayoutInflater().inflate(R.layout.detail_entryperiod, null);
-        final TextView date = (TextView) v.findViewById(R.id.detail_entryperiod_date);
-        final TextView system = (TextView) v.findViewById(R.id.detail_entryperiod_system);
-        final TextView format = (TextView) v.findViewById(R.id.detail_entryperiod_format);
+        final TextView date = findById(v, R.id.detail_entryperiod_date);
+        final TextView system = findById(v, R.id.detail_entryperiod_system);
+        final TextView format = findById(v, R.id.detail_entryperiod_format);
         date.setText(data.entryperiod_month + "月" + data.entryperiod_day + "日");
         system.setText(data.entryperiod_system);
         format.setText(data.entryperiod_format);
@@ -124,11 +127,11 @@ public class CompanyDetailFragment extends Fragment {
 
     private void setEntryseat() {
         final View v = getActivity().getLayoutInflater().inflate(R.layout.detail_entryseat, null);
-        final TextView start = (TextView) v.findViewById(R.id.detail_entryseat_start);
-        final TextView end = (TextView) v.findViewById(R.id.detail_entryseat_end);
-        final TextView system = (TextView) v.findViewById(R.id.detail_entryseat_system);
-        final TextView contains = (TextView) v.findViewById(R.id.detail_entryseat_contains);
-        final TableRow contains_row = (TableRow)v.findViewById(R.id.entryseat_contains_row);
+        final TextView start = findById(v, R.id.detail_entryseat_start);
+        final TextView end = findById(v, R.id.detail_entryseat_end);
+        final TextView system = findById(v, R.id.detail_entryseat_system);
+        final TextView contains = findById(v, R.id.detail_entryseat_contains);
+        final TableRow contains_row = findById(v, R.id.entryseat_contains_row);
         start.setText(data.entryseat_start_month + "月" + data.entryseat_start_day + "日から");
         end.setText(data.entryseat_end_month + "月" + data.entryseat_end_day + "日まで");
         system.setText(data.entryseat_system);
@@ -139,11 +142,11 @@ public class CompanyDetailFragment extends Fragment {
 
     private void setGroupdiscussion() {
         final View v = getActivity().getLayoutInflater().inflate(R.layout.detail_groupdiscussion, null);
-        final TextView date = (TextView) v.findViewById(R.id.detail_groupdiscussion_date);
-        final TextView time = (TextView) v.findViewById(R.id.detail_groupdiscussion_time);
-        final TextView place = (TextView) v.findViewById(R.id.detail_groupdiscussion_place);
-        final TextView clothes = (TextView) v.findViewById(R.id.detail_groupdiscussion_clothes);
-        final TableRow place_row = (TableRow)v.findViewById(R.id.group_place_row);
+        final TextView date = findById(v, R.id.detail_groupdiscussion_date);
+        final TextView time = findById(v, R.id.detail_groupdiscussion_time);
+        final TextView place = findById(v, R.id.detail_groupdiscussion_place);
+        final TextView clothes = findById(v, R.id.detail_groupdiscussion_clothes);
+        final TableRow place_row = findById(v, R.id.group_place_row);
         date.setText(data.groupdiscussion_month + "月" + data.groupdiscussion_day + "日");
         time.setText(data.groupdiscussion_time);
         place.setText(data.groupdiscussion_place);
@@ -154,10 +157,10 @@ public class CompanyDetailFragment extends Fragment {
 
     private void setGuidance() {
         final View v = getActivity().getLayoutInflater().inflate(R.layout.detail_guidance, null);
-        final TextView date = (TextView) v.findViewById(R.id.detail_guidance_date);
-        final TextView time = (TextView) v.findViewById(R.id.detail_guidance_time);
-        final TextView place = (TextView) v.findViewById(R.id.detail_guidance_place);
-        final TableRow place_row = (TableRow)v.findViewById(R.id.guidance_place_row);
+        final TextView date = findById(v, R.id.detail_guidance_date);
+        final TextView time = findById(v, R.id.detail_guidance_time);
+        final TextView place = findById(v, R.id.detail_guidance_place);
+        final TableRow place_row = findById(v, R.id.guidance_place_row);
         date.setText(data.guidance_month + "月" + data.guidance_day + "日");
         time.setText(data.guidance_time);
         place.setText(data.guidance_place);
@@ -167,15 +170,15 @@ public class CompanyDetailFragment extends Fragment {
 
     private void setInterview() {
         final View v = getActivity().getLayoutInflater().inflate(R.layout.detail_interview, null);
-        final TextView title = (TextView) v.findViewById(R.id.detail_interview_title);
-        final TextView date = (TextView) v.findViewById(R.id.detail_interview_date);
-        final TextView time = (TextView) v.findViewById(R.id.detail_interview_time);
-        final TextView format = (TextView) v.findViewById(R.id.detail_interview_format);
-        final TextView person = (TextView) v.findViewById(R.id.detail_interview_person);
-        final TextView clothes = (TextView) v.findViewById(R.id.detail_interview_clothes);
-        final TextView place = (TextView)v.findViewById(R.id.detail_interview_place);
-        final TableRow place_row = (TableRow)v.findViewById(R.id.interview_place_row);
-        final TableRow person_row = (TableRow)v.findViewById(R.id.interview_person_row);
+        final TextView title = findById(v, R.id.detail_interview_title);
+        final TextView date = findById(v, R.id.detail_interview_date);
+        final TextView time = findById(v, R.id.detail_interview_time);
+        final TextView format = findById(v, R.id.detail_interview_format);
+        final TextView person = findById(v, R.id.detail_interview_person);
+        final TextView clothes = findById(v, R.id.detail_interview_clothes);
+        final TextView place = findById(v, R.id.detail_interview_place);
+        final TableRow place_row = findById(v, R.id.interview_place_row);
+        final TableRow person_row = findById(v, R.id.interview_person_row);
         title.setText(interview_count + "次面接 ");
         setInterviewItem(date, time, format, person, clothes, place, place_row, person_row);
         interview_count++;
@@ -184,15 +187,15 @@ public class CompanyDetailFragment extends Fragment {
 
     private void setFinalinterview() {
         final View v = getActivity().getLayoutInflater().inflate(R.layout.detail_interview, null);
-        final TextView title = (TextView) v.findViewById(R.id.detail_interview_title);
-        final TextView date = (TextView) v.findViewById(R.id.detail_interview_date);
-        final TextView time = (TextView) v.findViewById(R.id.detail_interview_time);
-        final TextView format = (TextView) v.findViewById(R.id.detail_interview_format);
-        final TextView person = (TextView) v.findViewById(R.id.detail_interview_person);
-        final TextView clothes = (TextView) v.findViewById(R.id.detail_interview_clothes);
-        final TextView place = (TextView)v.findViewById(R.id.detail_interview_place);
-        final TableRow place_row = (TableRow)v.findViewById(R.id.interview_place_row);
-        final TableRow person_row = (TableRow)v.findViewById(R.id.interview_person_row);
+        final TextView title = findById(v, R.id.detail_interview_title);
+        final TextView date = findById(v, R.id.detail_interview_date);
+        final TextView time = findById(v, R.id.detail_interview_time);
+        final TextView format = findById(v, R.id.detail_interview_format);
+        final TextView person = findById(v, R.id.detail_interview_person);
+        final TextView clothes = findById(v, R.id.detail_interview_clothes);
+        final TextView place = findById(v, R.id.detail_interview_place);
+        final TableRow place_row = findById(v, R.id.interview_place_row);
+        final TableRow person_row = findById(v, R.id.interview_person_row);
         title.setText("最終面接");
         date.setText(data.interview_month_final + "月" + data.interview_day_final + "日");
         time.setText(data.interview_time_final);
@@ -212,10 +215,10 @@ public class CompanyDetailFragment extends Fragment {
 
     private void setPersonalseat() {
         final View v = getActivity().getLayoutInflater().inflate(R.layout.detail_personalseat, null);
-        final TextView start = (TextView) v.findViewById(R.id.detail_personalseat_start);
-        final TextView end = (TextView) v.findViewById(R.id.detail_personalseat_end);
-        final TextView system = (TextView) v.findViewById(R.id.detail_personalseat_system);
-        final TextView format = (TextView) v.findViewById(R.id.detail_personalseat_format);
+        final TextView start = findById(v, R.id.detail_personalseat_start);
+        final TextView end = findById(v, R.id.detail_personalseat_end);
+        final TextView system = findById(v, R.id.detail_personalseat_system);
+        final TextView format = findById(v, R.id.detail_personalseat_format);
         start.setText(data.personal_start_month + "月" + data.personal_start_day + "日から");
         end.setText(data.personal_end_month + "月" + data.personal_end_day + "日まで");
         system.setText(data.personalseat_system);

@@ -4,15 +4,15 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
+
+import static butterknife.ButterKnife.findById;
+
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +45,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnItemSelected;
+
 
 /*
 　
@@ -57,9 +62,11 @@ import java.util.List;
 　*/
 
 public class AddCompanyActivity extends ActionBarActivity {
-    private LinearLayout layout;
-    private int yearId;
+    @InjectView(R.id.add_container)
+    LinearLayout layout;
+
     public HashMap<Integer, String> map;
+    private int yearId;
     public int interview_count;
 
     private ArrayList<CalendarInsertItem> insertItemList;
@@ -68,11 +75,14 @@ public class AddCompanyActivity extends ActionBarActivity {
 
     private HashMap<Integer, FontAwesomeText> deleteList;
 
-    private Spinner colorSpinner;
-    private String labelColor;
+    @InjectView(R.id.colorSpinner)
+    Spinner colorSpinner;
 
+    private String labelColor;
     private boolean situation;
-    private ScrollView scroller;
+
+    @InjectView(R.id.scroller)
+    ScrollView scroller;
 
     //　使われたかどうか
     public boolean
@@ -86,8 +96,10 @@ public class AddCompanyActivity extends ActionBarActivity {
     public int count;
 
     /*　社名、部署名　*/
-    private EditText company_name;
-    private EditText company_place;
+    @InjectView(R.id.company_name)
+    EditText company_name;
+    @InjectView(R.id.company_place)
+    EditText company_place;
 
     /*　説明会　*/
     private BootstrapEditText guidance_place;
@@ -136,49 +148,54 @@ public class AddCompanyActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_company);
+        ButterKnife.inject(this);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setTitle("選考を追加");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initialize();
+    }
+
+    private void initialize(){
         mNow = Calendar.getInstance();
         mNow.setTimeInMillis(System.currentTimeMillis());
         insertItemList = new ArrayList<>();
-
-        layout = (LinearLayout) findViewById(R.id.add_container);
-        company_name = (EditText) findViewById(R.id.company_name);
-        company_place = (EditText) findViewById(R.id.company_place);
-        colorSpinner = (Spinner) findViewById(R.id.colorSpinner);
+        interview_item = new HashMap<>();
+        deleteList = new HashMap<>();
         colorSpinner.setAdapter(new MySpinnerAdapter(getApplicationContext()));
         yearId = Resources.getSystem().getIdentifier("year", "id", "android");
-        initMap();
-        interview_item = new HashMap<>();
-        scroller = (ScrollView) findViewById(R.id.scroller);
-        deleteList = new HashMap<>();
-        findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddCompanyListFragment fragment = new AddCompanyListFragment();
-                fragment.show(getSupportFragmentManager(), "予定追加");
-            }
-        });
+        map = new HashMap<>();
+        map.put(0, "説明会");
+        map.put(1, "エントリーシート");
+        map.put(2, "履歴書");
+        map.put(3, "グループディスカッション");
+        map.put(4, "面接");
+        map.put(5, "最終面接");
+        map.put(6, "エントリー締め切り");
+    }
 
-        findViewById(R.id.scrollup).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scroller.fullScroll(ScrollView.FOCUS_UP);
-            }
-        });
+    /**
+     * 会社追加ダイアログボタン
+     */
+    @OnClick(R.id.add)
+    void showAddDialog(){
+        AddCompanyListFragment fragment = new AddCompanyListFragment();
+        fragment.show(getSupportFragmentManager(), "予定追加");
+    }
 
-        colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Spinner s = (Spinner) parent;
-                labelColor = Integer.toString((Integer) s.getItemAtPosition(position));
-            }
+    /**
+     * 上に戻るボタン
+     */
+    @OnClick(R.id.scrollup)
+    void focusUp(){
+        scroller.fullScroll(ScrollView.FOCUS_UP);
+    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+    /**
+     * 色のスピナー洗濯時
+     */
+    @OnItemSelected(R.id.colorSpinner)
+    void onItemSelected(final Spinner spinner, int position){
+        labelColor = Integer.toString((Integer) spinner.getItemAtPosition(position));
     }
 
     protected void onResume() {
@@ -223,14 +240,12 @@ public class AddCompanyActivity extends ActionBarActivity {
         final View v = getLayoutInflater().inflate(R.layout.guidance, null);
         try {
             v.findViewById(R.id.guidance_date).findViewById(yearId).setVisibility(View.GONE);
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        v.setAnimation(getAnimation(0, 1, 500));
-        layout.addView(v);
-        guidance_place = (BootstrapEditText) v.findViewById(R.id.guidance_place);
-        guidance_date = (DatePicker) v.findViewById(R.id.guidance_date);
-        guidance_time = (TimePicker) v.findViewById(R.id.guidance_time);
+        guidance_place = findById(v, R.id.guidance_place);
+        guidance_date = findById(v, R.id.guidance_date);
+        guidance_time = findById(v, R.id.guidance_time);
         guidance_time.setCurrentHour(0);
         guidance_time.setCurrentMinute(0);
         guidance_time.setIs24HourView(true);
@@ -241,6 +256,8 @@ public class AddCompanyActivity extends ActionBarActivity {
                 closeView(v, 0, view);
             }
         });
+        v.setAnimation(getAnimation(0, 1, 500));
+        layout.addView(v);
     }
 
     public void setEntrySeat() {
@@ -248,14 +265,14 @@ public class AddCompanyActivity extends ActionBarActivity {
         try {
             v.findViewById(R.id.entry_seat_start).findViewById(yearId).setVisibility(View.GONE);
             v.findViewById(R.id.entry_seat_end).findViewById(yearId).setVisibility(View.GONE);
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
-        entryseat_start = (DatePicker) v.findViewById(R.id.entry_seat_start);
-        entryseat_end = (DatePicker) v.findViewById(R.id.entry_seat_end);
-        entryseat_system = (RadioGroup) v.findViewById(R.id.entry_seat_system);
-        entryseat_contains = (BootstrapEditText) v.findViewById(R.id.entry_seat_contains);
+        entryseat_start = findById(v, R.id.entry_seat_start);
+        entryseat_end = findById(v, R.id.entry_seat_end);
+        entryseat_system = findById(v, R.id.entry_seat_system);
+        entryseat_contains = findById(v, R.id.entry_seat_contains);
         isEntrySeat = true;
         v.findViewById(R.id.entryseat_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,12 +286,12 @@ public class AddCompanyActivity extends ActionBarActivity {
 
     public void setPersonalSeat() {
         final View v = getLayoutInflater().inflate(R.layout.personal_seat, null);
-        personalseat_start = (DatePicker) v.findViewById(R.id.personal_seat_start);
+        personalseat_start = findById(v, R.id.personal_seat_start);
         personalseat_start.findViewById(yearId).setVisibility(View.GONE);
-        personalseat_end = (DatePicker) v.findViewById(R.id.personal_seat_end);
+        personalseat_end = findById(v, R.id.personal_seat_end);
         personalseat_end.findViewById(yearId).setVisibility(View.GONE);
-        personalseat_system = (RadioGroup) v.findViewById(R.id.personal_seat_system);
-        personalseat_format = (RadioGroup) v.findViewById(R.id.personal_seat_format);
+        personalseat_system = findById(v, R.id.personal_seat_system);
+        personalseat_format = findById(v, R.id.personal_seat_format);
         isPersonalSeat = true;
         v.findViewById(R.id.personal_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,13 +307,13 @@ public class AddCompanyActivity extends ActionBarActivity {
         final View v = getLayoutInflater().inflate(R.layout.group_discussion, null);
         try {
             v.findViewById(R.id.group_discussion_date).findViewById(yearId).setVisibility(View.GONE);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        groupdiscussion_place = (BootstrapEditText) v.findViewById(R.id.group_discussion_place);
-        groupdiscussion_clothes = (RadioGroup) v.findViewById(R.id.group_discussion_clothes);
-        groupdiscussion_date = (DatePicker) v.findViewById(R.id.group_discussion_date);
-        groupdiscussion_time = (TimePicker) v.findViewById(R.id.group_discussion_time);
+        groupdiscussion_place = findById(v, R.id.group_discussion_place);
+        groupdiscussion_clothes = findById(v, R.id.group_discussion_clothes);
+        groupdiscussion_date = findById(v, R.id.group_discussion_date);
+        groupdiscussion_time = findById(v, R.id.group_discussion_time);
         groupdiscussion_time.setCurrentHour(0);
         groupdiscussion_time.setCurrentMinute(0);
         groupdiscussion_time.setIs24HourView(true);
@@ -315,23 +332,23 @@ public class AddCompanyActivity extends ActionBarActivity {
         final View v = getLayoutInflater().inflate(R.layout.interview, null);
         try {
             v.findViewById(R.id.interview_date).findViewById(yearId).setVisibility(View.GONE);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        TextView interview_name = (TextView) v.findViewById(R.id.interview_count);
+        TextView interview_name = findById(v, R.id.interview_count);
         interview_name.setText(count + "面接");
-        interview_place = (BootstrapEditText) v.findViewById(R.id.interview_place);
-        RadioGroup interview_clothes = (RadioGroup) v.findViewById(R.id.interview_clothes);
-        DatePicker interview_date = (DatePicker) v.findViewById(R.id.interview_date);
-        TimePicker interview_time = (TimePicker) v.findViewById(R.id.interview_time);
+        interview_place = findById(v, R.id.interview_place);
+        RadioGroup interview_clothes = findById(v, R.id.interview_clothes);
+        DatePicker interview_date = findById(v, R.id.interview_date);
+        TimePicker interview_time = findById(v, R.id.interview_time);
         interview_time.setCurrentHour(0);
         interview_time.setCurrentMinute(0);
         interview_time.setIs24HourView(true);
-        RadioGroup interview_format = (RadioGroup) v.findViewById(R.id.interview_format);
-        CheckBox interview_student = (CheckBox) v.findViewById(R.id.interview_person_student);
-        CheckBox interview_cto = (CheckBox) v.findViewById(R.id.interview_person_cto);
-        CheckBox interview_ceo = (CheckBox) v.findViewById(R.id.interview_person_ceo);
-        CheckBox interview_hr = (CheckBox) v.findViewById(R.id.interview_person_hr);
+        RadioGroup interview_format = findById(v, R.id.interview_format);
+        CheckBox interview_student = findById(v, R.id.interview_person_student);
+        CheckBox interview_cto = findById(v, R.id.interview_person_cto);
+        CheckBox interview_ceo = findById(v, R.id.interview_person_ceo);
+        CheckBox interview_hr = findById(v, R.id.interview_person_hr);
         InterviewItem item = new InterviewItem();
         item.setInterview_place(interview_place);
         item.setInterview_clothes(interview_clothes);
@@ -365,23 +382,23 @@ public class AddCompanyActivity extends ActionBarActivity {
         final View v = getLayoutInflater().inflate(R.layout.interview, null);
         try {
             v.findViewById(R.id.interview_date).findViewById(yearId).setVisibility(View.GONE);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        TextView interview_count = (TextView) v.findViewById(R.id.interview_count);
+        TextView interview_count = findById(v, R.id.interview_count);
         interview_count.setText("最終面接");
-        finalInterview_place = (BootstrapEditText) v.findViewById(R.id.interview_place);
-        finalInterview_clothes = (RadioGroup) v.findViewById(R.id.interview_clothes);
-        finalInterview_date = (DatePicker) v.findViewById(R.id.interview_date);
-        finalInterview_time = (TimePicker) v.findViewById(R.id.interview_time);
+        finalInterview_place = findById(v, R.id.interview_place);
+        finalInterview_clothes = findById(v, R.id.interview_clothes);
+        finalInterview_date = findById(v, R.id.interview_date);
+        finalInterview_time = findById(v, R.id.interview_time);
         finalInterview_time.setCurrentHour(0);
         finalInterview_time.setCurrentMinute(0);
         finalInterview_time.setIs24HourView(true);
-        finalInterview_format = (RadioGroup) v.findViewById(R.id.interview_format);
-        finalInterview_student = (CheckBox) v.findViewById(R.id.interview_person_student);
-        finalInterview_cto = (CheckBox) v.findViewById(R.id.interview_person_cto);
-        finalInterview_ceo = (CheckBox) v.findViewById(R.id.interview_person_ceo);
-        finalInterview_hr = (CheckBox) v.findViewById(R.id.interview_person_hr);
+        finalInterview_format = findById(v, R.id.interview_format);
+        finalInterview_student = findById(v, R.id.interview_person_student);
+        finalInterview_cto = findById(v, R.id.interview_person_cto);
+        finalInterview_ceo = findById(v, R.id.interview_person_ceo);
+        finalInterview_hr = findById(v, R.id.interview_person_hr);
         isFinalInterview = true;
         v.findViewById(R.id.interview_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -397,14 +414,14 @@ public class AddCompanyActivity extends ActionBarActivity {
         final View v = getLayoutInflater().inflate(R.layout.entry_period, null);
         try {
             v.findViewById(R.id.entry_period_date).findViewById(yearId).setVisibility(View.GONE);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        entryperiod_system = (RadioGroup) v.findViewById(R.id.entry_period_system);
-        entryperiod_format = (RadioGroup) v.findViewById(R.id.entry_period_format);
-        entryperiod_date = (DatePicker) v.findViewById(R.id.entry_period_date);
+        entryperiod_system = findById(v, R.id.entry_period_system);
+        entryperiod_format = findById(v, R.id.entry_period_format);
+        entryperiod_date = findById(v, R.id.entry_period_date);
         isEntryPeriod = true;
-        final FontAwesomeText t = (FontAwesomeText) v.findViewById(R.id.entryperiod_close);
+        final FontAwesomeText t = findById(v, R.id.entryperiod_close);
         v.findViewById(R.id.entryperiod_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -413,17 +430,6 @@ public class AddCompanyActivity extends ActionBarActivity {
         });
         v.setAnimation(getAnimation(0, 1, 500));
         layout.addView(v);
-    }
-
-    private void initMap() {
-        map = new HashMap<>();
-        map.put(0, "説明会");
-        map.put(1, "エントリーシート");
-        map.put(2, "履歴書");
-        map.put(3, "グループディスカッション");
-        map.put(4, "面接");
-        map.put(5, "最終面接");
-        map.put(6, "エントリー締め切り");
     }
 
     private void endOfEdit() {

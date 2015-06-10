@@ -25,24 +25,36 @@ import com.fefe.jobhunter.item.InfoItem;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnItemClick;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class InfomationFragment extends Fragment implements AdapterView.OnItemClickListener {
-
+public class InfomationFragment extends Fragment {
+    @InjectView(R.id.infoList)
     private ListView mList;
+
     private MyInfoAdapter adapter;
     private InfoItem item;
+
     private Switch s;
 
     public InfomationFragment() {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_infomation, container, false);
-        mList = (ListView) v.findViewById(R.id.infoList);
+        ButterKnife.inject(this, v);
         final ArrayList<InfoItem> arr = new ArrayList<>();
         insertItem(arr);
         adapter = new MyInfoAdapter(
@@ -51,13 +63,11 @@ public class InfomationFragment extends Fragment implements AdapterView.OnItemCl
                 arr
         );
         mList.setAdapter(adapter);
-        mList.setOnItemClickListener(this);
         return v;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        final ListView lv = (ListView) parent;
+    @OnItemClick(R.id.infoList)
+    void onItemClick(final ListView lv, int position){
         final InfoItem item = (InfoItem) lv.getItemAtPosition(position);
         if (item.getTitle().equals("お問い合わせ")) {
             final Intent intent = new Intent();

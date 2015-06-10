@@ -14,12 +14,25 @@ import android.widget.Switch;
 import com.fefe.jobhunter.MainActivity;
 import com.fefe.jobhunter.R;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
+public class SettingsFragment extends Fragment {
+    @InjectView(R.id.save_calendar)
     private Switch mSwitch;
+
     private SharedPreferences sp;
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
+
     private SharedPreferences.Editor editor;
 
 
@@ -31,10 +44,17 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        mSwitch = (Switch) v.findViewById(R.id.save_calendar);
-        mSwitch.setOnCheckedChangeListener(this);
+        ButterKnife.inject(this, v);
         return v;
     }
+
+    @OnCheckedChanged(R.id.save_calendar)
+    void checkedChange(final boolean isChecked){
+        editor = sp.edit();
+        editor.putBoolean("save", isChecked);
+        editor.apply();
+    }
+
 
     @Override
     public void onResume(){
@@ -68,10 +88,4 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        editor = sp.edit();
-        editor.putBoolean("save", isChecked);
-        editor.apply();
-    }
 }
